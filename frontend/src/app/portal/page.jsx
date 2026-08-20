@@ -322,8 +322,13 @@ export default function PortalPage() {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-house-800">بوابة ولي الأمر</h1>
-            <p className="text-house-500">أهلاً، {user?.name}</p>
+            <h1 className="text-3xl font-bold text-house-800">
+              {user?.role === 'admin' ? 'لوحة تحكم الإدارة' :
+               user?.role === 'teacher' ? 'بوابة المعلم' :
+               user?.role === 'student' ? 'بوابة الطالب' :
+               'بوابة ولي الأمر'}
+            </h1>
+            <p className="text-house-500">أهلاً بك، {user?.name || user?.email}</p>
           </div>
           <Button variant="secondary" onClick={logout}>تسجيل الخروج</Button>
         </div>

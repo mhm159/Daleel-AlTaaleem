@@ -55,8 +55,10 @@ export function AuthProvider({ children }) {
         localStorage.setItem('user', JSON.stringify(userData));
       } else {
         let role = 'parent';
-        if (authUser.email === 'admin@learningguide.school') role = 'admin';
-        if (authUser.email === 'teacher@learningguide.school') role = 'teacher';
+        const lowerEmail = authUser.email.toLowerCase();
+        if (lowerEmail.includes('admin')) role = 'admin';
+        else if (lowerEmail.includes('teacher')) role = 'teacher';
+        else if (lowerEmail.includes('student')) role = 'student';
         
         const defaultUser = { id: authUser.id, email: authUser.email, role };
         setUser(defaultUser);
@@ -85,8 +87,10 @@ export function AuthProvider({ children }) {
         .single();
         
       let role = 'parent';
-      if (data.user.email === 'admin@learningguide.school') role = 'admin';
-      if (data.user.email === 'teacher@learningguide.school') role = 'teacher';
+      const lowerEmail = data.user.email.toLowerCase();
+      if (lowerEmail.includes('admin')) role = 'admin';
+      else if (lowerEmail.includes('teacher')) role = 'teacher';
+      else if (lowerEmail.includes('student')) role = 'student';
 
       let userData = { id: data.user.id, email: data.user.email, role };
       if (profile) {

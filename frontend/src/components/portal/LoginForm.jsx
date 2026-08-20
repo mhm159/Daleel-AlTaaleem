@@ -5,7 +5,7 @@ import { useAuth } from '../AuthContext';
 import { api } from '../../lib/api';
 import { Button, Alert, Loader } from '../ui/Button';
 
-export default function LoginForm({ onSuccess, title = 'تسجيل الدخول لبوابة ولي الأمر', subtitle = 'تابع تقدم طفلك، حضوره، والمزيد' }) {
+export default function LoginForm({ onSuccess, title = 'تسجيل الدخول للنظام الموحد', subtitle = 'أدخل بريدك الإلكتروني للوصول إلى لوحة التحكم الخاصة بك' }) {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,7 +48,7 @@ export default function LoginForm({ onSuccess, title = 'تسجيل الدخول 
               className="input-field"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="parent@email.com"
+              placeholder="user@learningguide.school"
               required
             />
           </div>

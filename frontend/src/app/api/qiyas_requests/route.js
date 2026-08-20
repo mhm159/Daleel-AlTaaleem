@@ -2,7 +2,12 @@ import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 
-const getFilePath = () => path.join(process.cwd(), 'data', 'qiyas_requests.json');
+const getFilePath = () => {
+  if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+    return path.join('/tmp', 'qiyas_requests.json');
+  }
+  return path.join(process.cwd(), 'data', 'qiyas_requests.json');
+};
 
 export async function GET(request) {
   try {
