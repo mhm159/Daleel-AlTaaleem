@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { api } from '../lib/api';
+import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext(null);
 
@@ -10,62 +10,135 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Load user on mount
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    const storedUser = localStorage.getItem('user');
-    if (token && storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-        setIsAuthenticated(true);
-      } catch (e) {
-        localStorage.removeItem('user');
+    // Check active sessions and sets the user
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        await fetchUserProfile(session.user);
+      } else {
+        setLoading(false);
       }
-    }
-    setLoading(false);
+    };
+    
+    checkSession();
+
+    // Listen for changes on auth state (sign in, sign out, etc.)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session) {
+        await fetchUserProfile(session.user);
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+        localStorage.removeItem('user');
+        setLoading(false);
+      }
+    });
+
+    return () => {
+      subscription?.unsubscribe();
+    };
   }, []);
 
-  const login = useCallback(async (email, password) => {
-    const data = await api.post('/auth/login', { email, password });
-    if (data.success) {
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      setUser(data.user);
-      setIsAuthenticated(true);
+  const fetchUserProfile = async (authUser) => {
+    try {
+      const { data: profile, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', authUser.id)
+        .single();
+
+      if (profile) {
+        const userData = { id: authUser.id, ...profile };
+        setUser(userData);
+        setIsAuthenticated(true);
+        localStorage.setItem('user', JSON.stringify(userData));
+      } else {
+        const defaultUser = { id: authUser.id, email: authUser.email, role: 'parent' };
+        setUser(defaultUser);
+        setIsAuthenticated(true);
+      }
+    } catch (e) {
+      console.error("Error fetching user profile", e);
+    } finally {
+      setLoading(false);
     }
-    return data;
+  };
+
+  const login = useCallback(async (email, password) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (error) throw error;
+      
+      const { data: profile, error: profileError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', data.user.id)
+        .single();
+        
+      let userData = { id: data.user.id, email: data.user.email, role: 'parent' };
+      if (profile) {
+        userData = { id: data.user.id, ...profile };
+      }
+      
+      setUser(userData);
+      setIsAuthenticated(true);
+      return { success: true, user: userData };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
   }, []);
 
   const register = useCallback(async (userData) => {
-    const data = await api.post('/auth/register', userData);
-    if (data.success) {
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      setUser(data.user);
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: userData.email,
+        password: userData.password,
+      });
+      
+      if (error) throw error;
+      if (!data.user) throw new Error("Registration failed");
+      
+      const newUser = {
+        id: data.user.id,
+        email: userData.email,
+        name: userData.name,
+        role: userData.role || 'parent',
+        phone: userData.phone || '',
+        created_at: new Date().toISOString()
+      };
+
+      const { error: insertError } = await supabase
+        .from('users')
+        .insert([newUser]);
+        
+      if (insertError && insertError.code !== '23505') {
+        console.error("Error creating user profile", insertError);
+      }
+      
+      setUser(newUser);
       setIsAuthenticated(true);
+      return { success: true, user: newUser };
+    } catch (error) {
+      return { success: false, message: error.message };
     }
-    return data;
   }, []);
 
-  const logout = useCallback(() => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
+  const logout = useCallback(async () => {
+    await supabase.auth.signOut();
     setUser(null);
     setIsAuthenticated(false);
+    localStorage.removeItem('user');
   }, []);
 
   const refreshUser = useCallback(async () => {
-    try {
-      const data = await api.get('/auth/me');
-      if (data.success) {
-        setUser(data.user);
-        localStorage.setItem('user', JSON.stringify(data.user));
-      }
-    } catch (err) {
-      console.error('Failed to refresh user', err);
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      await fetchUserProfile(session.user);
     }
   }, []);
 
