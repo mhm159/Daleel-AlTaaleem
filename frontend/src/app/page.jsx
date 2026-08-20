@@ -7,7 +7,10 @@ import { api } from '../lib/api';
 import { Button, Card, SectionHeading, Badge } from '../components/ui/Button';
 import { Loader, Alert } from '../components/ui/Button';
 
-function HeroSection() {
+function HeroSection({ settings }) {
+  if (!settings) return <div className="h-96 flex items-center justify-center"><Loader /></div>;
+  const hp = settings.homepage || {};
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-bl from-sky-50 via-white to-growth-50">
       {/* Decorative background */}
@@ -21,12 +24,11 @@ function HeroSection() {
           <div className="animate-fade-in-up">
             <Badge variant="gold">✦ التميز في التعليم</Badge>
             <h1 className="mt-4 text-4xl font-bold leading-tight text-house-800 md:text-5xl lg:text-6xl">
-              نرعى <span className="gradient-text">النشء</span>،<br />
-              ونبني <span className="gradient-text">المستقبل</span>
+              {hp.heroTitle1} <span className="gradient-text">{hp.heroTitleAccent1}</span>،<br />
+              {hp.heroTitle2} <span className="gradient-text">{hp.heroTitleAccent2}</span>
             </h1>
             <p className="mt-6 text-lg text-house-500 max-w-xl">
-              في مدارس دليل التعلم الأهلية، نوفر بيئة تعليمية آمنة وداعمة تُنمي الطالب
-              أكاديمياً وشخصياً واجتماعياً، في ظل المنهج الوطني السعودي المتميز.
+              {hp.heroSubtitle}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link href="/admissions" className="btn-primary inline-flex items-center justify-center text-center">
@@ -41,16 +43,16 @@ function HeroSection() {
             {/* Quick stats */}
             <div className="mt-12 grid grid-cols-3 gap-6">
               <div>
-                <div className="text-3xl font-bold text-sky-600">+15</div>
-                <div className="text-sm text-house-500">سنة من التميز</div>
+                <div className="text-3xl font-bold text-sky-600">{hp.stat1Value}</div>
+                <div className="text-sm text-house-500">{hp.stat1Label}</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-growth-600">+2500</div>
-                <div className="text-sm text-house-500">طالب وطالبة</div>
+                <div className="text-3xl font-bold text-growth-600">{hp.stat2Value}</div>
+                <div className="text-sm text-house-500">{hp.stat2Label}</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-gold-600">98%</div>
-                <div className="text-sm text-house-500">رضا أولياء الأمور</div>
+                <div className="text-3xl font-bold text-gold-600">{hp.stat3Value}</div>
+                <div className="text-sm text-house-500">{hp.stat3Label}</div>
               </div>
             </div>
           </div>
@@ -284,9 +286,20 @@ function CTASection() {
 }
 
 export default function HomePage() {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setSettings(data);
+      })
+      .catch(console.error);
+  }, []);
+
   return (
     <>
-      <HeroSection />
+      <HeroSection settings={settings} />
       <FeaturesSection />
       <QuickAccessSection />
       <NewsFeed />

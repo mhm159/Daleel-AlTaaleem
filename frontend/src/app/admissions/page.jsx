@@ -24,7 +24,7 @@ const TUITION_FEES = {
 
 const REGISTRATION_FEE = 1500;
 
-function ApplicationForm() {
+function ApplicationForm({ settings }) {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -82,7 +82,8 @@ function ApplicationForm() {
     );
   }
 
-  const selectedFee = formData.gradeApplyingFor ? TUITION_FEES[formData.gradeApplyingFor] : 0;
+  const selectedGradeObj = settings?.grades?.find(g => g.name === formData.gradeApplyingFor);
+  const selectedFee = selectedGradeObj ? selectedGradeObj.fee : 0;
 
   return (
     <Card className="p-6 md:p-8">
@@ -130,7 +131,7 @@ function ApplicationForm() {
                 <label className="input-label">الصف المطلوب الالتحاق به *</label>
                 <select className="input-field" required value={formData.gradeApplyingFor} onChange={(e) => updateField('gradeApplyingFor', e.target.value)}>
                   <option value="">اختر الصف</option>
-                  {GRADE_LEVELS.map(g => <option key={g} value={g}>{g}</option>)}
+                  {settings?.grades?.map(g => <option key={g.id} value={g.name}>{g.name}</option>)}
                 </select>
               </div>
               <div>
@@ -234,23 +235,23 @@ function ApplicationForm() {
   );
 }
 
-function TuitionSection() {
+function TuitionSection({ settings }) {
   return (
     <section className="py-20 section-gold">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         <SectionHeading title="هيكل الرسوم الدراسية" subtitle="رسوم شفافة وتنافسية مقابل تعليم متميز" accent="gold" />
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {Object.entries(TUITION_FEES).map(([grade, fee]) => (
-            <Card key={grade} className="p-6">
-              <h3 className="mb-2 font-bold text-house-800">{grade}</h3>
-              <div className="text-3xl font-bold text-gold-600">{fee.toLocaleString('ar-SA')} ريال</div>
+          {settings?.grades?.map((grade) => (
+            <Card key={grade.id} className="p-6">
+              <h3 className="mb-2 font-bold text-house-800">{grade.name}</h3>
+              <div className="text-3xl font-bold text-gold-600">{Number(grade.fee).toLocaleString('ar-SA')} ريال</div>
               <div className="mt-1 text-sm text-house-500">سنوياً</div>
             </Card>
           ))}
         </div>
         <div className="mt-8 rounded-2xl bg-white p-6 text-center shadow-sm">
           <p className="text-house-600">
-            <strong className="text-gold-600">رسوم التسجيل:</strong> {REGISTRATION_FEE.toLocaleString('ar-SA')} ريال (تُدفع مرة واحدة عند القبول)
+            <strong className="text-gold-600">رسوم التسجيل:</strong> {Number(settings?.registrationFee || 1500).toLocaleString('ar-SA')} ريال (تُدفع مرة واحدة عند القبول)
           </p>
           <p className="mt-2 text-sm text-house-500">
             * تشمل الرسوم الكتب المدرسية ومواد المختبرات والأنشطة اللاصفية الأساسية.
@@ -322,6 +323,19 @@ function AdmissionCriteria() {
 }
 
 export default function AdmissionsPage() {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setSettings(data);
+      })
+      .catch(console.error);
+  }, []);
+
+  if (!settings) return <div className="h-screen flex items-center justify-center"><Loader /></div>;
+
   return (
     <>
       <div className="bg-gradient-to-br from-sky-50 to-white py-16">
@@ -337,13 +351,13 @@ export default function AdmissionsPage() {
       <section className="py-20 bg-white">
         <div className="mx-auto max-w-3xl px-4 lg:px-8">
           <SectionHeading title="نموذج التقديم الإلكتروني" subtitle="أكمل جميع الحقول لإرسال طلبك" accent="sky" />
-          <ApplicationForm />
+          <ApplicationForm settings={settings} />
         </div>
       </section>
 
       <ProcessSection />
       <AdmissionCriteria />
-      <TuitionSection />
+      <TuitionSection settings={settings} />
     </>
   );
 }

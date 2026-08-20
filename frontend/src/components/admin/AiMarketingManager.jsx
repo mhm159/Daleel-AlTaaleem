@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, Button } from '../../ui/Button';
+import { Card, Button } from '../ui/Button';
 
 export default function AiMarketingManager() {
   const [prompt, setPrompt] = useState('');

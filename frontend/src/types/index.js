@@ -22,6 +22,7 @@ export const NAV_LINKS = [
   { href: '/about', label: 'عن المدرسة' },
   { href: '/admissions', label: 'القبول والتسجيل' },
   { href: '/academics', label: 'الأنشطة الأكاديمية' },
+  { href: '/qiyas', label: 'القدرات والتحصيلي' },
   { href: '/news', label: 'الأخبار والفعاليات' },
   { href: '/contact', label: 'تواصل معنا' },
 ];
@@ -29,6 +30,6 @@ export const NAV_LINKS = [
 export const SOCIAL_LINKS = {
   whatsapp: 'https://wa.me/966501234567',
   instagram: 'https://instagram.com/learningguideschools',
-  twitter: 'https://twitter.com/learningguide',
+  twitter: 'https://twitter.com/MOE_WDI_01_0016',
   facebook: 'https://facebook.com/learningguideschools',
 };

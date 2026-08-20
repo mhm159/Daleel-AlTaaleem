@@ -2,10 +2,11 @@ import '../styles/globals.css';
 import { AuthProvider } from '../components/AuthContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { Toaster } from 'react-hot-toast';
 
 export const metadata = {
   title: 'مدارس دليل التعلم الأهلية - نحو مستقبل مشرق',
-  description: 'مدارس دليل التعلم الأهلية بالمملكة العربية السعودية - بيئة تعليمية متكاملة تجمع بين الأمان والتميز الأكاديمي وتنمية شخصية الطالب وفق المناهج الوطنية السعودية.',
+  description: 'مدارس دليل التعلم الأهلية بالمملكة العربية السعودية - عين على تنشئة الجيل.',
   keywords: 'مدارس أهلية, مدارس دليل التعلم, التعليم السعودي, القبول والتسجيل, بوابة ولي الأمر, المملكة العربية السعودية',
   icons: {
     icon: '/logo.png',
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
       </head>
       <body style={{ fontFamily: "'Tajawal', sans-serif" }}>
         <DynamicFavicon />
+        <Toaster position="bottom-center" />
         <AuthProvider>
           <Navbar />
           <main className="min-h-screen">{children}</main>

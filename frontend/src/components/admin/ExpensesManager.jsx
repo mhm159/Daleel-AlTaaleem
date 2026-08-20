@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, Button, Loader } from '../../ui/Button';
+import { Card, Button, Loader } from '../ui/Button';
 
 export default function ExpensesManager() {
   const [expenses, setExpenses] = useState([

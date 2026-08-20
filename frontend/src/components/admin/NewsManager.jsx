@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { api } from '../../../lib/api';
-import { Card, Button, Loader } from '../../ui/Button';
+import { api } from '../../lib/api';
+import { Card, Button, Loader } from '../ui/Button';
+import toast from 'react-hot-toast';
 
 export default function NewsManager() {
   const [news, setNews] = useState([]);
@@ -11,6 +12,7 @@ export default function NewsManager() {
   const [form, setForm] = useState({
     title: '', content: '', excerpt: '', category: 'news', status: 'draft', image: '',
   });
+  const [generating, setGenerating] = useState(false);
 
   useEffect(() => {
     loadNews();
@@ -27,15 +29,44 @@ export default function NewsManager() {
     }
   };
 
+  const handleGenerateAI = async () => {
+    if (!form.title) {
+      toast.error('الرجاء إدخال عنوان المقال أولاً ليتمكن الذكاء الاصطناعي من الكتابة عنه.');
+      return;
+    }
+    setGenerating(true);
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: form.title, promptType: 'news' })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'خطأ في التوليد');
+      
+      setForm(prev => ({
+        ...prev,
+        content: data.content,
+        excerpt: data.excerpt
+      }));
+      toast.success('تم التوليد بنجاح!');
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await api.post('/news', { ...form, id: editing?._id });
       setEditing(null);
       setForm({ title: '', content: '', excerpt: '', category: 'news', status: 'draft', image: '' });
+      toast.success(editing ? 'تم تحديث المقال' : 'تم نشر المقال');
       loadNews();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -43,9 +74,10 @@ export default function NewsManager() {
     if (!confirm('هل تريد حذف هذا المقال؟')) return;
     try {
       await api.delete(`/news/${id}`);
+      toast.success('تم الحذف بنجاح');
       loadNews();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -59,9 +91,14 @@ export default function NewsManager() {
         <h3 className="mb-4 font-semibold text-house-800">{editing ? 'تعديل مقال' : 'مقال جديد'}</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="sm:col-span-2">
+            <div className="sm:col-span-2 relative">
               <label className="input-label">العنوان</label>
-              <input className="input-field" required value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} />
+              <div className="flex gap-2">
+                <input className="input-field flex-1" required value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} placeholder="مثال: أهمية التكنولوجيا في التعليم الحديث" />
+                <Button type="button" variant="gold" onClick={handleGenerateAI} disabled={generating || !form.title} className="whitespace-nowrap px-4 py-2 text-sm flex items-center gap-1">
+                  <span>✨</span> {generating ? 'جاري التوليد...' : 'توليد بالذكاء الاصطناعي'}
+                </Button>
+              </div>
             </div>
             <div>
               <label className="input-label">التصنيف</label>

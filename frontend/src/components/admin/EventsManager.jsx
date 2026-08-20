@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { api } from '../../../lib/api';
-import { Card, Button, Loader } from '../../ui/Button';
+import { api } from '../../lib/api';
+import { Card, Button, Loader } from '../ui/Button';
 
 export default function EventsManager() {
   const [events, setEvents] = useState([]);

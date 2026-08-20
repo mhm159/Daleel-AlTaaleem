@@ -16,8 +16,9 @@ import PaymentsManager from '../../components/admin/PaymentsManager';
 import ContactsManager from '../../components/admin/ContactsManager';
 import ExpensesManager from '../../components/admin/ExpensesManager';
 import AiMarketingManager from '../../components/admin/AiMarketingManager';
-
 import SettingsManager from '../../components/admin/SettingsManager';
+import TuitionManager from '../../components/admin/TuitionManager';
+import QiyasManager from '../../components/admin/QiyasManager';
 
 const SIDEBAR = [
   { id: 'overview', label: 'نظرة عامة', icon: '📊' },
@@ -26,8 +27,9 @@ const SIDEBAR = [
   { id: 'calendar', label: 'التقويم الدراسي', icon: '🗓️' },
   { id: 'admissions', label: 'القبول والتسجيل', icon: '📝' },
   { id: 'students', label: 'الطلاب', icon: '🎓' },
-  { id: 'payments', label: 'الإيرادات والرسوم', icon: '💳' },
-  { id: 'expenses', label: 'المصروفات', icon: '💸' },
+  { id: 'payments', label: 'الإيرادات', icon: '💳' },
+  { id: 'tuition', label: 'المصروفات الدراسية', icon: '💰' },
+  { id: 'qiyas', label: 'القدرات والتحصيلي', icon: '🎯' },
   { id: 'contacts', label: 'رسائل التواصل', icon: '✉️' },
   { id: 'marketing', label: 'التسويق (AI)', icon: '🤖' },
   { id: 'settings', label: 'الإعدادات', icon: '⚙️' },
@@ -65,8 +67,9 @@ export default function AdminDashboard() {
       case 'admissions': return <AdmissionsManager />;
       case 'students': return <StudentsManager />;
       case 'payments': return <PaymentsManager />;
+      case 'tuition': return <TuitionManager />;
+      case 'qiyas': return <QiyasManager />;
       case 'contacts': return <ContactsManager />;
-      case 'expenses': return <ExpensesManager />;
       case 'marketing': return <AiMarketingManager />;
       case 'settings': return <SettingsManager />;
       default: return <Overview onNavigate={setActiveTab} />;

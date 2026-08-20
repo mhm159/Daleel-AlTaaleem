@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { api } from '../../../lib/api';
-import { Card, Button, Loader } from '../../ui/Button';
+import { api } from '../../lib/api';
+import { Card, Button, Loader } from '../ui/Button';
 
 export default function Overview({ onNavigate }) {
   const [stats, setStats] = useState(null);
