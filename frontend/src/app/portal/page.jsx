@@ -219,11 +219,11 @@ function PaymentsTab() {
       if (data.success) {
         setClientSecret(data.clientSecret);
         // In production: use Stripe.js to confirm payment with clientSecret
-        alert('Demo mode: Payment intent created. In production, Stripe.js would handle the payment.');
+        toast.success('Demo mode: Payment intent created. In production, Stripe.js would handle the payment.');
         setShowPayment(false);
       }
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     } finally {
       setProcessing(false);
     }

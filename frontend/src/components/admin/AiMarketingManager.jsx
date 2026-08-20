@@ -61,7 +61,7 @@ export default function AiMarketingManager() {
                 <p className="text-house-700 whitespace-pre-wrap text-sm leading-relaxed">{result.text}</p>
               </div>
               <div className="flex space-x-2">
-                <Button variant="secondary" onClick={() => alert('تم النسخ للحافظة')} className="flex-1">نسخ النص</Button>
+                <Button variant="secondary" onClick={() => toast('تم النسخ للحافظة')} className="flex-1">نسخ النص</Button>
                 <Button variant="gold" className="flex-1">تحميل الصورة</Button>
               </div>
             </div>

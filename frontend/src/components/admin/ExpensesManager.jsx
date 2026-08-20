@@ -20,7 +20,7 @@ export default function ExpensesManager() {
     };
     setExpenses([newExpense, ...expenses]);
     setForm({ title: '', amount: '', date: '', category: 'رواتب' });
-    alert('تم إضافة المصروف بنجاح (نسخة تجريبية)');
+    toast.success('تم إضافة المصروف بنجاح (نسخة تجريبية)');
   };
 
   const handleDelete = (id) => {

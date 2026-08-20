@@ -70,7 +70,7 @@ export default function TeacherDashboard({ activeTab }) {
         <Card className="p-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold text-house-800">تاريخ اليوم: {new Date().toLocaleDateString('ar-SA')}</h3>
-            <Button variant="primary" onClick={() => alert('تم حفظ سجل الغياب بنجاح')}>حفظ السجل</Button>
+            <Button variant="primary" onClick={() => toast.success('تم حفظ سجل الغياب بنجاح')}>حفظ السجل</Button>
           </div>
           
           <div className="space-y-3">
@@ -137,7 +137,7 @@ export default function TeacherDashboard({ activeTab }) {
         <Card className="p-6">
           <div className="flex justify-between items-center mb-6">
             <h3 className="font-semibold text-house-800">سجل الدرجات - اختبار الفترة الأولى</h3>
-            <Button variant="primary" onClick={() => alert('تم حفظ الدرجات بنجاح')}>حفظ الدرجات</Button>
+            <Button variant="primary" onClick={() => toast.success('تم حفظ الدرجات بنجاح')}>حفظ الدرجات</Button>
           </div>
 
           <div className="overflow-x-auto">

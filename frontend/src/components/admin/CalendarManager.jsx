@@ -33,7 +33,7 @@ export default function CalendarManager() {
       setForm({ title: '', startDate: '', endDate: '', description: '', type: 'event', color: '#0ea5e9', isAllDay: true, gradeLevel: 'all' });
       loadEntries();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -43,7 +43,7 @@ export default function CalendarManager() {
       await api.delete(`/calendar/${id}`);
       loadEntries();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 

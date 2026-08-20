@@ -28,7 +28,7 @@ export default function AdmissionsManager() {
       await api.put(`/admissions/${id}/status`, { status });
       loadAdmissions();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 

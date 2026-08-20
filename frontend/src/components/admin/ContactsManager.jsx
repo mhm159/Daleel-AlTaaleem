@@ -28,7 +28,7 @@ export default function ContactsManager() {
       await api.put(`/contacts/${id}`, { status });
       loadContacts();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 

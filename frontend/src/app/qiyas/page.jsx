@@ -58,7 +58,7 @@ export default function QiyasPage() {
       setTrackingCode(data.code);
       setSubmitted(true);
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     } finally {
       setSubmitting(false);
     }

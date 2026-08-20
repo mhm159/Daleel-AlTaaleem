@@ -33,7 +33,7 @@ export default function EventsManager() {
       setForm({ title: '', description: '', date: '', startTime: '', endTime: '', location: '', category: 'general', image: '' });
       loadEvents();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -43,7 +43,7 @@ export default function EventsManager() {
       await api.delete(`/events/${id}`);
       loadEvents();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
