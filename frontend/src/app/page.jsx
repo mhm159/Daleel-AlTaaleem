@@ -61,12 +61,10 @@ function HeroSection({ settings }) {
           <div className="relative animate-fade-in-up flex items-center justify-center" style={{ animationDelay: '0.2s' }}>
             <div className="relative rounded-3xl bg-gradient-to-br from-sky-400 to-sky-600 p-8 shadow-2xl">
               <div className="rounded-2xl bg-white/10 backdrop-blur-sm p-8 flex items-center justify-center">
-                <Image
-                  src="/logo.png"
+                <img
+                  src={settings.images?.heroLogo || "/logo.png"}
                   alt="مدارس دليل التعلم الأهلية"
-                  width={240}
-                  height={240}
-                  className="object-contain animate-float drop-shadow-2xl"
+                  className="object-contain animate-float drop-shadow-2xl w-[240px] h-[240px]"
                 />
               </div>
               <div className="mt-4 flex items-center justify-between text-white">

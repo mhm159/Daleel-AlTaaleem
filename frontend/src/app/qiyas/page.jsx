@@ -118,7 +118,7 @@ export default function QiyasPage() {
             {/* Card 1 */}
             <Card className="overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-0 bg-white">
               <div className="relative h-64 overflow-hidden bg-indigo-900">
-                <img src="/qiyas_ad.jpg" alt="إعلان دورة القدرات" className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
+                <img src={settings?.images?.qiyasAd || "/qiyas_ad.jpg"} alt="إعلان دورة القدرات" className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4">
                   <Badge variant="gold" className="mb-2">القدرات العامة</Badge>
@@ -150,7 +150,7 @@ export default function QiyasPage() {
             {/* Card 2 */}
             <Card className="overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-0 bg-white">
               <div className="relative h-64 overflow-hidden bg-purple-900">
-                <img src="/tahsili_ad.jpg" alt="إعلان دورة التحصيلي" className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
+                <img src={settings?.images?.tahsiliAd || "/tahsili_ad.jpg"} alt="إعلان دورة التحصيلي" className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4">
                   <Badge variant="sky" className="mb-2">التحصيلي العلمي</Badge>

@@ -6,6 +6,17 @@ import Image from 'next/image';
 import { SOCIAL_LINKS } from '../types';
 
 export default function Footer() {
+  const [settings, setSettings] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setSettings(data);
+      })
+      .catch(console.error);
+  }, []);
+
   return (
     <footer className="bg-house-900 text-house-100">
       <div className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
@@ -13,7 +24,7 @@ export default function Footer() {
           {/* About */}
           <div>
             <div className="mb-4 flex items-center gap-3">
-              <Image src="/logo.png" alt="شعار مدارس دليل التعلم الأهلية" width={48} height={48} className="object-contain" />
+              <img src={settings?.images?.logo || "/logo.png"} alt="شعار مدارس دليل التعلم الأهلية" className="w-12 h-12 object-contain" />
               <div className="flex flex-col">
                 <span className="text-base font-bold text-white">مدارس دليل التعلم</span>
                 <span className="text-sm font-medium text-sky-400">الأهلية</span>

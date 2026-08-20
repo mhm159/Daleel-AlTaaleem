@@ -88,5 +88,12 @@
   "aiSettings": {
     "apiKey": "",
     "provider": "gemini"
+  },
+  "images": {
+    "logo": "/logo.png",
+    "heroLogo": "/logo.png",
+    "qiyasAd": "/qiyas_ad.jpg",
+    "tahsiliAd": "/tahsili_ad.jpg",
+    "aboutHero": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=500"
   }
 }

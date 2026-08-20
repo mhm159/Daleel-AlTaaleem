@@ -5,14 +5,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { SectionHeading, Card, Badge } from '../../components/ui/Button';
 
-function PrincipalMessage() {
+function PrincipalMessage({ settings }) {
   return (
     <section className="py-20 bg-white">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
             <img
-              src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=500"
+              src={settings?.images?.aboutHero || "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=500"}
               alt="مدير المدرسة"
               className="mx-auto rounded-3xl shadow-xl"
             />
@@ -178,6 +178,17 @@ function AchievementsSection() {
 }
 
 export default function AboutPage() {
+  const [settings, setSettings] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setSettings(data);
+      })
+      .catch(console.error);
+  }, []);
+
   return (
     <>
       <div className="bg-gradient-to-br from-sky-50 to-white py-16">
@@ -189,7 +200,7 @@ export default function AboutPage() {
           </p>
         </div>
       </div>
-      <PrincipalMessage />
+      <PrincipalMessage settings={settings} />
       <HistorySection />
       <ValuesSection />
       <FacilitiesSection />

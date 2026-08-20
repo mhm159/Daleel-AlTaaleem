@@ -11,33 +11,26 @@ export default function SettingsManager() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Load logo from localStorage on mount
-    const saved = localStorage.getItem('school_logo');
-    setLogoUrl(saved || '/logo.png');
+  const updateImage = (field, value) => {
+    setSettings(prev => ({
+      ...prev,
+      images: { ...prev.images, [field]: value }
+    }));
+  };
 
-    // Load settings from API
-    fetch('/api/settings')
-      .then(res => res.json())
-      .then(data => {
-        if (!data.error) setSettings(data);
-      })
-      .catch(console.error);
-  }, []);
-
-  const handleLogoSave = (e) => {
-    e.preventDefault();
-    localStorage.setItem('school_logo', logoUrl);
-    
-    let link = document.querySelector("link[rel~='icon']");
-    if (!link) {
-        link = document.createElement('link');
-        link.rel = 'icon';
-        document.head.appendChild(link);
+  const handleImageUpload = (field, e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) { // 2MB limit
+        toast.error('حجم الصورة كبير جداً. الحد الأقصى هو 2 ميجابايت.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        updateImage(field, reader.result);
+      };
+      reader.readAsDataURL(file);
     }
-    link.href = logoUrl;
-    
-    window.dispatchEvent(new Event('logoChanged'));
-    toast.success('تم حفظ الشعار وتحديثه بنجاح!');
   };
 
   const handleSettingsSave = async (e) => {
@@ -73,40 +66,57 @@ export default function SettingsManager() {
     <div className="space-y-6 animate-fade-in-up">
       <h2 className="text-2xl font-bold text-house-800">إعدادات الموقع الشاملة</h2>
 
-      {/* Logo Settings */}
-      <Card className="p-6">
-        <h3 className="mb-4 font-semibold text-house-800">الهوية البصرية</h3>
-        <form onSubmit={handleLogoSave} className="space-y-4">
-          <div>
-            <label className="input-label">شعار المدرسة (أيقونة التبويب والموقع)</label>
-            <input 
-              type="file"
-              accept="image/*"
-              className="input-field cursor-pointer" 
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    setLogoUrl(reader.result);
-                  };
-                  reader.readAsDataURL(file);
-                }
-              }} 
-            />
-          </div>
-          <div className="mt-4 p-4 border rounded-lg bg-house-50 inline-block">
-            <p className="text-sm font-medium mb-2">معاينة الشعار الحالي:</p>
-            {logoUrl && <img src={logoUrl} alt="Logo preview" className="h-16 object-contain" onError={(e) => e.target.style.display='none'} />}
-          </div>
-          <div>
-            <Button type="submit" variant="primary">حفظ الشعار</Button>
-          </div>
-        </form>
-      </Card>
-
       {!settings ? <Loader /> : (
         <form onSubmit={handleSettingsSave} className="space-y-6">
+          {error && <Alert type="error" message={error} />}
+
+          {/* Images Settings */}
+          <Card className="p-6">
+            <h3 className="mb-4 font-semibold text-house-800">إدارة الصور والهوية البصرية</h3>
+            <p className="text-sm text-house-500 mb-4">ضع روابط الصور هنا (يمكنك استخدام روابط خارجية أو مسارات محلية مثل /logo.png)</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="input-label">شعار المدرسة</label>
+                <div className="flex flex-col gap-2">
+                  <input type="file" accept="image/*" className="input-field text-sm" onChange={(e) => handleImageUpload('logo', e)} />
+                  <input type="text" placeholder="أو أدخل الرابط..." className="input-field text-sm" value={settings.images?.logo || ''} onChange={(e) => updateImage('logo', e.target.value)} />
+                </div>
+                {settings.images?.logo && <img src={settings.images.logo} alt="preview" className="h-16 mt-2 object-contain bg-house-50 p-2 rounded border" />}
+              </div>
+              <div>
+                <label className="input-label">صورة بطل الرئيسية (Hero)</label>
+                <div className="flex flex-col gap-2">
+                  <input type="file" accept="image/*" className="input-field text-sm" onChange={(e) => handleImageUpload('heroLogo', e)} />
+                  <input type="text" placeholder="أو أدخل الرابط..." className="input-field text-sm" value={settings.images?.heroLogo || ''} onChange={(e) => updateImage('heroLogo', e.target.value)} />
+                </div>
+                {settings.images?.heroLogo && <img src={settings.images.heroLogo} alt="preview" className="h-16 mt-2 object-contain bg-house-50 p-2 rounded border" />}
+              </div>
+              <div>
+                <label className="input-label">إعلان القدرات (القياس)</label>
+                <div className="flex flex-col gap-2">
+                  <input type="file" accept="image/*" className="input-field text-sm" onChange={(e) => handleImageUpload('qiyasAd', e)} />
+                  <input type="text" placeholder="أو أدخل الرابط..." className="input-field text-sm" value={settings.images?.qiyasAd || ''} onChange={(e) => updateImage('qiyasAd', e.target.value)} />
+                </div>
+                {settings.images?.qiyasAd && <img src={settings.images.qiyasAd} alt="preview" className="h-16 mt-2 object-contain bg-house-50 p-2 rounded border" />}
+              </div>
+              <div>
+                <label className="input-label">إعلان التحصيلي</label>
+                <div className="flex flex-col gap-2">
+                  <input type="file" accept="image/*" className="input-field text-sm" onChange={(e) => handleImageUpload('tahsiliAd', e)} />
+                  <input type="text" placeholder="أو أدخل الرابط..." className="input-field text-sm" value={settings.images?.tahsiliAd || ''} onChange={(e) => updateImage('tahsiliAd', e.target.value)} />
+                </div>
+                {settings.images?.tahsiliAd && <img src={settings.images.tahsiliAd} alt="preview" className="h-16 mt-2 object-contain bg-house-50 p-2 rounded border" />}
+              </div>
+              <div className="md:col-span-2">
+                <label className="input-label">صورة صفحة "عن المدرسة"</label>
+                <div className="flex flex-col gap-2">
+                  <input type="file" accept="image/*" className="input-field text-sm" onChange={(e) => handleImageUpload('aboutHero', e)} />
+                  <input type="text" placeholder="أو أدخل الرابط..." className="input-field text-sm" value={settings.images?.aboutHero || ''} onChange={(e) => updateImage('aboutHero', e.target.value)} />
+                </div>
+                {settings.images?.aboutHero && <img src={settings.images.aboutHero} alt="preview" className="h-24 mt-2 object-cover bg-house-50 p-2 rounded border w-full max-w-sm" />}
+              </div>
+            </div>
+          </Card>
           {error && <Alert type="error" message={error} />}
           
           {/* Homepage Text */}

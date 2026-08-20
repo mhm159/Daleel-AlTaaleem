@@ -117,7 +117,7 @@ function ApplicationForm({ settings }) {
               </div>
               <div>
                 <label className="input-label">تاريخ الميلاد *</label>
-                <input type="date" className="input-field" required value={formData.dateOfBirth} onChange={(e) => updateField('dateOfBirth', e.target.value)} />
+                <input type="text" onFocus={(e) => (e.target.type = "date")} onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }} placeholder="يوم/شهر/سنة" className="input-field" required value={formData.dateOfBirth} onChange={(e) => updateField('dateOfBirth', e.target.value)} />
               </div>
               <div>
                 <label className="input-label">الجنس *</label>

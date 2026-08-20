@@ -12,6 +12,16 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { isAuthenticated } = useAuth();
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setSettings(data);
+      })
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -29,7 +39,7 @@ export default function Navbar() {
         {/* Logo (Right) */}
         <div className="flex-1 flex justify-start">
           <Link href="/" className="flex items-center gap-3 shrink-0">
-            <Image src="/logo.png" alt="شعار مدارس دليل التعلم الأهلية" width={52} height={52} className="object-contain" />
+            <img src={settings?.images?.logo || "/logo.png"} alt="شعار مدارس دليل التعلم الأهلية" className="w-[52px] h-[52px] object-contain" />
             <div className="flex flex-col">
               <span className="text-base font-bold leading-tight text-house-800">مدارس دليل التعلم</span>
               <span className="text-xs font-medium leading-tight text-sky-600">الأهلية</span>
