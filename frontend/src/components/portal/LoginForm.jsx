@@ -5,7 +5,7 @@ import { useAuth } from '../AuthContext';
 import { api } from '../../lib/api';
 import { Button, Alert, Loader } from '../ui/Button';
 
-export default function LoginForm({ onSuccess }) {
+export default function LoginForm({ onSuccess, title = 'تسجيل الدخول لبوابة ولي الأمر', subtitle = 'تابع تقدم طفلك، حضوره، والمزيد' }) {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,8 +34,8 @@ export default function LoginForm({ onSuccess }) {
     <div className="mx-auto max-w-md">
       <Card className="p-8">
         <div className="mb-6 text-center">
-          <h2 className="text-2xl font-bold text-house-800">تسجيل الدخول لبوابة ولي الأمر</h2>
-          <p className="mt-2 text-sm text-house-500">تابع تقدم طفلك، حضوره، والمزيد</p>
+          <h2 className="text-2xl font-bold text-house-800">{title}</h2>
+          <p className="mt-2 text-sm text-house-500">{subtitle}</p>
         </div>
 
         {error && <Alert type="error" message={error} />}
