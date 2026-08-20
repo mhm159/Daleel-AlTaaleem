@@ -94,10 +94,10 @@ function MapSection() {
   return (
     <section className="py-16 bg-white">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
-        <SectionHeading title="موقعنا" subtitle="نقع في قلب الرياض، يسهل الوصول إلينا من جميع الأحياء" accent="sky" />
+        <SectionHeading title="موقعنا" subtitle="يسهل الوصول إلينا من جميع الانحاء" accent="sky" />
         <div className="overflow-hidden rounded-3xl shadow-lg">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3624.793483181!2d46.6753!3d24.7136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDQyJzQ5LjAiTiA0NsKwNDAnMzEuMSJF!5e0!3m2!1sar!2ssa!4v1699000000000!5m2!1sar!2ssa"
+            src="https://maps.google.com/maps?q=FHHP%2B6F%20%D8%A7%D9%84%D8%B3%D9%84%D9%8A%D9%84&t=&z=15&ie=UTF8&iwloc=&output=embed"
             width="100%"
             height="400"
             style={{ border: 0 }}
