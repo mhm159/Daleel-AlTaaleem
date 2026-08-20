@@ -75,12 +75,7 @@ export default function LoginForm({ onSuccess }) {
           </Button>
         </form>
 
-        <div className="mt-6 rounded-lg bg-sky-50 p-4 text-sm">
-          <p className="font-semibold text-sky-700">بيانات تجريبية:</p>
-          <p className="mt-1 text-house-600">ولي الأمر: parent@learningguide.school / parent123</p>
-          <p className="text-house-600">المعلم: teacher@learningguide.school / teacher123</p>
-          <p className="text-house-600">الإدارة: admin@learningguide.school / admin123</p>
-        </div>
+
       </Card>
     </div>
   );
