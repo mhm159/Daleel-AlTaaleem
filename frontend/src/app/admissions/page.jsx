@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { api } from '../../lib/api';
 import { SectionHeading, Card, Badge, Button, Alert, Loader } from '../../components/ui/Button';
 import { GRADE_LEVELS } from '../../types';
