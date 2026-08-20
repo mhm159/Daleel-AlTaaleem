@@ -223,7 +223,7 @@ export default function PortalDashboard() {
           {user?.role === 'teacher' && 'أدر فصولك، وسجل الدرجات، وتواصل مع أولياء الأمور.'}
           {user?.role === 'admin' && 'صلاحيات إدارية كاملة لإدارة المدرسة.'}
         </p>
-      </Card>>
+      </Card>
 
       {/* Children overview */}
       {loading ? <Loader /> : (
