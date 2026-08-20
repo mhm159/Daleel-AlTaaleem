@@ -11,6 +11,15 @@ export default function SettingsManager() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Load settings from API
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setSettings(data);
+      })
+      .catch(console.error);
+  }, []);
+
   const updateImage = (field, value) => {
     setSettings(prev => ({
       ...prev,
