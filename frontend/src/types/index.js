@@ -28,7 +28,7 @@ export const NAV_LINKS = [
 ];
 
 export const SOCIAL_LINKS = {
-  whatsapp: 'https://wa.me/966501234567',
+  whatsapp: 'https://wa.me/966530630979',
   instagram: 'https://instagram.com/learningguideschools',
   twitter: 'https://twitter.com/MOE_WDI_01_0016',
   facebook: 'https://facebook.com/learningguideschools',
