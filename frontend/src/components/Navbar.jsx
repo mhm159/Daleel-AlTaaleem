@@ -43,7 +43,7 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`nav-link text-sm whitespace-nowrap ${pathname === link.href ? 'active' : ''}`}
+              className={`nav-link font-bold text-[15px] whitespace-nowrap ${pathname === link.href ? 'active' : ''}`}
             >
               {link.label}
             </Link>
