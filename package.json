@@ -1,0 +1,14 @@
+{
+  "name": "learning-guide-schools",
+  "version": "1.0.0",
+  "description": "Full-stack private school website - Learning Guide Schools",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd backend && npm run dev",
+    "dev:client": "cd frontend && npm run dev",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
