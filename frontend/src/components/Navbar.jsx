@@ -36,12 +36,12 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden items-center gap-6 lg:flex">
+        <div className="hidden items-center gap-3 lg:flex xl:gap-4">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`nav-link ${pathname === link.href ? 'active' : ''}`}
+              className={`nav-link text-sm whitespace-nowrap ${pathname === link.href ? 'active' : ''}`}
             >
               {link.label}
             </Link>
