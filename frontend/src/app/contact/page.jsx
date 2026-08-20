@@ -162,7 +162,7 @@ function SocialSection() {
         <h2 className="text-3xl font-bold text-house-800">تابعنا على وسائل التواصل</h2>
         <p className="mt-3 text-house-500">تابع حساباتنا للاطلاع على أحدث الأخبار والفعاليات والمستجدات.</p>
         <div className="mt-8 flex justify-center gap-4">
-          <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="flex h-14 w-14 items-center justify-center rounded-full bg-growth-500 text-white shadow-lg transition-transform hover:scale-110" aria-label="واتساب">
+          <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg transition-transform hover:scale-110" aria-label="واتساب">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 0111.85 11.85c0 6.555-5.335 11.89-11.89 11.89a11.9 11.9 0 01-5.958-1.547L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885 0-5.452-4.434-9.887-9.886-9.887-5.452 0-9.888 4.435-9.888 9.886 0 1.94.571 3.743 1.585 5.398l-1.06 3.857 3.968-1.04z"/></svg>
           </a>
           <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg transition-transform hover:scale-110" aria-label="إنستغرام">
@@ -222,12 +222,12 @@ export default function ContactPage() {
                   </div>
                 </Card>
                 <Card className="flex items-center gap-4 p-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold-100 text-gold-600">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-600">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 0111.85 11.85c0 6.555-5.335 11.89-11.89 11.89a11.9 11.9 0 01-5.958-1.547L.057 24z"/></svg>
                   </div>
                   <div>
                     <div className="font-semibold text-house-800">واتساب</div>
-                    <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="text-gold-600">تواصل عبر واتساب</a>
+                    <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="text-green-600">تواصل عبر واتساب</a>
                   </div>
                 </Card>
               </div>
