@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
+﻿import { NextResponse } from 'next/server';
+import { supabase } from '../../../lib/supabase';
 import path from 'path';
 
 export async function POST(request) {
@@ -7,17 +7,17 @@ export async function POST(request) {
     const { title, promptType } = await request.json();
 
     if (!title) {
-      return NextResponse.json({ error: 'العنوان مطلوب' }, { status: 400 });
+      return NextResponse.json({ error: 'ط§ظ„ط¹ظ†ظˆط§ظ† ظ…ط·ظ„ظˆط¨' }, { status: 400 });
     }
 
     // Read settings to get API key
-    const filePath = path.join(process.cwd(), 'data', 'settings.json');
-    const fileContents = await fs.readFile(filePath, 'utf8');
-    const settings = JSON.parse(fileContents);
+    const { data: settingsRow } = await supabase.from('app_settings').select('data').eq('id', 'main').single();
+    
+    const settings = settingsRow?.data || {};
     
     const aiSettings = settings.aiSettings;
     if (!aiSettings || !aiSettings.apiKey) {
-      return NextResponse.json({ error: 'يرجى إعداد مفتاح الـ API للذكاء الاصطناعي في صفحة الإعدادات أولاً' }, { status: 400 });
+      return NextResponse.json({ error: 'ظٹط±ط¬ظ‰ ط¥ط¹ط¯ط§ط¯ ظ…ظپطھط§ط­ ط§ظ„ظ€ API ظ„ظ„ط°ظƒط§ط، ط§ظ„ط§طµط·ظ†ط§ط¹ظٹ ظپظٹ طµظپط­ط© ط§ظ„ط¥ط¹ط¯ط§ط¯ط§طھ ط£ظˆظ„ط§ظ‹' }, { status: 400 });
     }
 
     const provider = aiSettings.provider || 'gemini';
@@ -28,17 +28,17 @@ export async function POST(request) {
       prompt = 'Say the word "SUCCESS" if you receive this message.';
     } else if (promptType === 'news') {
       prompt = `
-      أنت كاتب محتوى محترف وتعمل لدى مدرسة أهلية راقية في السعودية اسمها "مدارس دليل التعلم الأهلية".
-      مهمتك هي كتابة مقال أو خبر احترافي وعميق جداً بناءً على العنوان التالي: "${title}".
+      ط£ظ†طھ ظƒط§طھط¨ ظ…ط­طھظˆظ‰ ظ…ط­طھط±ظپ ظˆطھط¹ظ…ظ„ ظ„ط¯ظ‰ ظ…ط¯ط±ط³ط© ط£ظ‡ظ„ظٹط© ط±ط§ظ‚ظٹط© ظپظٹ ط§ظ„ط³ط¹ظˆط¯ظٹط© ط§ط³ظ…ظ‡ط§ "ظ…ط¯ط§ط±ط³ ط¯ظ„ظٹظ„ ط§ظ„طھط¹ظ„ظ… ط§ظ„ط£ظ‡ظ„ظٹط©".
+      ظ…ظ‡ظ…طھظƒ ظ‡ظٹ ظƒطھط§ط¨ط© ظ…ظ‚ط§ظ„ ط£ظˆ ط®ط¨ط± ط§ط­طھط±ط§ظپظٹ ظˆط¹ظ…ظٹظ‚ ط¬ط¯ط§ظ‹ ط¨ظ†ط§ط،ظ‹ ط¹ظ„ظ‰ ط§ظ„ط¹ظ†ظˆط§ظ† ط§ظ„طھط§ظ„ظٹ: "${title}".
       
-      المتطلبات:
-      1. أن يكون المحتوى ذو قيمة وعميق وليس سطحياً أو قصيراً.
-      2. استخدم لغة عربية فصحى جذابة ومناسبة للبيئة التعليمية والتربوية.
-      3. قم بتنسيق المحتوى باستخدام وسوم HTML الأساسية فقط (مثل <h3>, <p>, <ul>, <li>, <strong>) ليكون جاهزاً للعرض في الموقع.
-      4. لا تستخدم Markdown، استخدم HTML فقط.
-      5. لا تضف أي مقدمات أو خاتمات للرد مثل "بالتأكيد، إليك المقال"، فقط أرجع كود HTML.
-      6. قم بكتابة (مقتطف) قصير لا يتجاوز سطرين في بداية الرد محاطاً بوسم <excerpt>المقتطف هنا</excerpt> ليتم استخراجه برمجياً.
-      7. المقال يجب أن يعكس اهتمام المدرسة بالتطوير والتكنولوجيا وتربية النشء.
+      ط§ظ„ظ…طھط·ظ„ط¨ط§طھ:
+      1. ط£ظ† ظٹظƒظˆظ† ط§ظ„ظ…ط­طھظˆظ‰ ط°ظˆ ظ‚ظٹظ…ط© ظˆط¹ظ…ظٹظ‚ ظˆظ„ظٹط³ ط³ط·ط­ظٹط§ظ‹ ط£ظˆ ظ‚طµظٹط±ط§ظ‹.
+      2. ط§ط³طھط®ط¯ظ… ظ„ط؛ط© ط¹ط±ط¨ظٹط© ظپطµط­ظ‰ ط¬ط°ط§ط¨ط© ظˆظ…ظ†ط§ط³ط¨ط© ظ„ظ„ط¨ظٹط¦ط© ط§ظ„طھط¹ظ„ظٹظ…ظٹط© ظˆط§ظ„طھط±ط¨ظˆظٹط©.
+      3. ظ‚ظ… ط¨طھظ†ط³ظٹظ‚ ط§ظ„ظ…ط­طھظˆظ‰ ط¨ط§ط³طھط®ط¯ط§ظ… ظˆط³ظˆظ… HTML ط§ظ„ط£ط³ط§ط³ظٹط© ظپظ‚ط· (ظ…ط«ظ„ <h3>, <p>, <ul>, <li>, <strong>) ظ„ظٹظƒظˆظ† ط¬ط§ظ‡ط²ط§ظ‹ ظ„ظ„ط¹ط±ط¶ ظپظٹ ط§ظ„ظ…ظˆظ‚ط¹.
+      4. ظ„ط§ طھط³طھط®ط¯ظ… MarkdownطŒ ط§ط³طھط®ط¯ظ… HTML ظپظ‚ط·.
+      5. ظ„ط§ طھط¶ظپ ط£ظٹ ظ…ظ‚ط¯ظ…ط§طھ ط£ظˆ ط®ط§طھظ…ط§طھ ظ„ظ„ط±ط¯ ظ…ط«ظ„ "ط¨ط§ظ„طھط£ظƒظٹط¯طŒ ط¥ظ„ظٹظƒ ط§ظ„ظ…ظ‚ط§ظ„"طŒ ظپظ‚ط· ط£ط±ط¬ط¹ ظƒظˆط¯ HTML.
+      6. ظ‚ظ… ط¨ظƒطھط§ط¨ط© (ظ…ظ‚طھط·ظپ) ظ‚طµظٹط± ظ„ط§ ظٹطھط¬ط§ظˆط² ط³ط·ط±ظٹظ† ظپظٹ ط¨ط¯ط§ظٹط© ط§ظ„ط±ط¯ ظ…ط­ط§ط·ط§ظ‹ ط¨ظˆط³ظ… <excerpt>ط§ظ„ظ…ظ‚طھط·ظپ ظ‡ظ†ط§</excerpt> ظ„ظٹطھظ… ط§ط³طھط®ط±ط§ط¬ظ‡ ط¨ط±ظ…ط¬ظٹط§ظ‹.
+      7. ط§ظ„ظ…ظ‚ط§ظ„ ظٹط¬ط¨ ط£ظ† ظٹط¹ظƒط³ ط§ظ‡طھظ…ط§ظ… ط§ظ„ظ…ط¯ط±ط³ط© ط¨ط§ظ„طھط·ظˆظٹط± ظˆط§ظ„طھظƒظ†ظˆظ„ظˆط¬ظٹط§ ظˆطھط±ط¨ظٹط© ط§ظ„ظ†ط´ط،.
       `;
     } else {
       prompt = title; // fallback
@@ -57,7 +57,7 @@ export async function POST(request) {
       });
 
       const data = await response.json();
-      if (data.error) throw new Error(data.error.message || 'خطأ من مزود الذكاء الاصطناعي');
+      if (data.error) throw new Error(data.error.message || 'ط®ط·ط£ ظ…ظ† ظ…ط²ظˆط¯ ط§ظ„ط°ظƒط§ط، ط§ظ„ط§طµط·ظ†ط§ط¹ظٹ');
       
       generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
       
@@ -76,7 +76,7 @@ export async function POST(request) {
       });
 
       const data = await response.json();
-      if (data.error) throw new Error(data.error.message || 'خطأ من مزود الذكاء الاصطناعي');
+      if (data.error) throw new Error(data.error.message || 'ط®ط·ط£ ظ…ظ† ظ…ط²ظˆط¯ ط§ظ„ط°ظƒط§ط، ط§ظ„ط§طµط·ظ†ط§ط¹ظٹ');
       
       generatedText = data.choices?.[0]?.message?.content || '';
 
@@ -95,15 +95,15 @@ export async function POST(request) {
       });
 
       const data = await response.json();
-      if (data.error) throw new Error(data.error.message || 'خطأ من مزود الذكاء الاصطناعي');
+      if (data.error) throw new Error(data.error.message || 'ط®ط·ط£ ظ…ظ† ظ…ط²ظˆط¯ ط§ظ„ط°ظƒط§ط، ط§ظ„ط§طµط·ظ†ط§ط¹ظٹ');
       
       generatedText = data.choices?.[0]?.message?.content || '';
     } else {
-      throw new Error('مزود الذكاء الاصطناعي غير مدعوم');
+      throw new Error('ظ…ط²ظˆط¯ ط§ظ„ط°ظƒط§ط، ط§ظ„ط§طµط·ظ†ط§ط¹ظٹ ط؛ظٹط± ظ…ط¯ط¹ظˆظ…');
     }
 
     if (promptType === 'test') {
-      return NextResponse.json({ success: true, message: 'المفتاح صالح ومستعد للعمل', raw: generatedText });
+      return NextResponse.json({ success: true, message: 'ط§ظ„ظ…ظپطھط§ط­ طµط§ظ„ط­ ظˆظ…ط³طھط¹ط¯ ظ„ظ„ط¹ظ…ظ„', raw: generatedText });
     }
 
     // Extract excerpt
@@ -123,6 +123,6 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('AI Generation Error:', error);
-    return NextResponse.json({ error: error.message || 'حدث خطأ أثناء التوليد' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'ط­ط¯ط« ط®ط·ط£ ط£ط«ظ†ط§ط، ط§ظ„طھظˆظ„ظٹط¯' }, { status: 500 });
   }
 }

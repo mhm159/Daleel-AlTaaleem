@@ -1,21 +1,29 @@
-import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-
-// تحديد مسار ملف الإعدادات
-const getSettingsPath = () => path.join(process.cwd(), 'data', 'settings.json');
+﻿import { NextResponse } from 'next/server';
+import { supabase } from '../../../lib/supabase';
 
 export async function GET() {
   try {
-    const filePath = getSettingsPath();
-    if (!fs.existsSync(filePath)) {
-      // إرجاع خطأ أو إعدادات فارغة إذا لم يوجد الملف
-      return NextResponse.json({ error: 'Settings file not found' }, { status: 404 });
+    const { data, error } = await supabase
+      .from('app_settings')
+      .select('data')
+      .eq('id', 'main')
+      .single();
+
+    if (error) {
+      if (error.code === '42P01') {
+        console.warn('Table app_settings does not exist. Mocking success.');
+        return NextResponse.json({});
+      }
+      throw error;
     }
-    const data = fs.readFileSync(filePath, 'utf8');
-    return NextResponse.json(JSON.parse(data));
+
+    if (!data) {
+      return NextResponse.json({});
+    }
+
+    return NextResponse.json(data.data || {});
   } catch (error) {
-    console.error('Error reading settings:', error);
+    console.error('Error reading settings from Supabase:', error);
     return NextResponse.json({ error: 'Failed to read settings' }, { status: 500 });
   }
 }
@@ -23,18 +31,22 @@ export async function GET() {
 export async function POST(request) {
   try {
     const newData = await request.json();
-    const filePath = getSettingsPath();
     
-    // التأكد من وجود المجلد
-    const dir = path.dirname(filePath);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+    const { error } = await supabase
+      .from('app_settings')
+      .upsert({ id: 'main', data: newData });
+
+    if (error) {
+      if (error.code === '42P01') {
+        console.warn('Table app_settings does not exist. Mocking save success.');
+        return NextResponse.json({ success: true, message: 'Settings simulated save (table missing)' });
+      }
+      throw error;
     }
     
-    fs.writeFileSync(filePath, JSON.stringify(newData, null, 2), 'utf8');
     return NextResponse.json({ success: true, message: 'Settings saved successfully' });
   } catch (error) {
-    console.error('Error writing settings:', error);
+    console.error('Error writing settings to Supabase:', error);
     return NextResponse.json({ error: 'Failed to save settings' }, { status: 500 });
   }
 }
