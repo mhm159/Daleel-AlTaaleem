@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../../components/AuthContext';
 import { api } from '../../lib/api';
 import LoginForm from '../../components/portal/LoginForm';
@@ -305,6 +306,17 @@ function PaymentsTab() {
 export default function PortalPage() {
   const { isAuthenticated, user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('dashboard');
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      if (user.role === 'admin') {
+        router.push('/admin');
+      } else if (user.role === 'teacher') {
+        router.push('/teacher');
+      }
+    }
+  }, [isAuthenticated, user, router]);
 
   if (!isAuthenticated) {
     return (
@@ -314,6 +326,11 @@ export default function PortalPage() {
         </div>
       </div>
     );
+  }
+
+  // Hide portal while redirecting
+  if (user?.role === 'admin' || user?.role === 'teacher') {
+    return null;
   }
 
   return (
