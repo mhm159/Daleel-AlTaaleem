@@ -32,4 +32,5 @@ export const SOCIAL_LINKS = {
   instagram: 'https://instagram.com/learningguideschools',
   twitter: 'https://twitter.com/MOE_WDI_01_0016',
   facebook: 'https://facebook.com/learningguideschools',
+  snapchat: 'https://snapchat.com/add/dleel1436',
 };
