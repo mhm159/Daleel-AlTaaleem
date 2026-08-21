@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -39,10 +39,10 @@ export default function Navbar() {
         {/* Logo (Right) */}
         <div className="flex-1 flex justify-start">
           <Link href="/" className="flex items-center gap-3 shrink-0">
-            <img src={settings?.images?.logo || "/logo.png"} alt="ط´ط¹ط§ط± ظ…ط¯ط§ط±ط³ ط¯ظ„ظٹظ„ ط§ظ„طھط¹ظ„ظ… ط§ظ„ط£ظ‡ظ„ظٹط©" className="w-[52px] h-[52px] object-contain" />
+            <img src={settings?.images?.logo || "/logo.png"} alt="شعار مدارس دليل التعلم الأهلية" className="w-[52px] h-[52px] object-contain" />
             <div className="flex flex-col">
-              <span className="text-base font-bold leading-tight text-house-800">ظ…ط¯ط§ط±ط³ ط¯ظ„ظٹظ„ ط§ظ„طھط¹ظ„ظ…</span>
-              <span className="text-xs font-medium leading-tight text-sky-600">ط§ظ„ط£ظ‡ظ„ظٹط©</span>
+              <span className="text-base font-bold leading-tight text-house-800">مدارس دليل التعلم</span>
+              <span className="text-xs font-medium leading-tight text-sky-600">الأهلية</span>
             </div>
           </Link>
         </div>
@@ -63,14 +63,14 @@ export default function Navbar() {
         {/* Actions (Left) */}
         <div className="flex-1 flex justify-end items-center gap-4">
           <Link href="/portal" className="hidden lg:inline-flex btn-primary text-sm shrink-0">
-            {isAuthenticated ? 'ظ„ظˆط­ط© ط§ظ„طھط­ظƒظ…' : 'طھط³ط¬ظٹظ„ ط§ظ„ط¯ط®ظˆظ„'}
+            {isAuthenticated ? 'لوحة التحكم' : 'تسجيل الدخول'}
           </Link>
 
           {/* Mobile menu button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="flex h-10 w-10 items-center justify-center rounded-lg text-house-800 hover:bg-sky-50 lg:hidden"
-            aria-label="ط§ظ„ظ‚ط§ط¦ظ…ط©"
+            aria-label="القائمة"
           >
             {isOpen ? (
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -101,7 +101,7 @@ export default function Navbar() {
             </Link>
           ))}
           <Link href="/portal" className="mt-2 block btn-primary text-center text-sm">
-            {isAuthenticated ? 'ظ„ظˆط­ط© ط§ظ„طھط­ظƒظ…' : 'ط¨ظˆط§ط¨ط© ظˆظ„ظٹ ط§ظ„ط£ظ…ط±'}
+            {isAuthenticated ? 'لوحة التحكم' : 'تسجيل الدخول'}
           </Link>
         </div>
       </div>
