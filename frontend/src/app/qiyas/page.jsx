@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { SectionHeading, Card, Badge, Button, Loader, Alert } from '../../components/ui/Button';
+import { api } from '../../lib/api';
 
 export default function QiyasPage() {
   const [settings, setSettings] = useState(null);
@@ -44,19 +45,19 @@ export default function QiyasPage() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const res = await fetch('/api/qiyas_requests', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          courseId: selectedCourse.id,
-          courseName: selectedCourse.name
-        })
+      const code = 'QYS-' + Math.floor(1000 + Math.random() * 9000);
+      const data = await api.post('/qiyas_requests', {
+        ...formData,
+        courseId: selectedCourse.id,
+        courseName: selectedCourse.name,
+        code,
+        status: 'جديد',
+        createdAt: new Date().toISOString()
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'حدث خطأ');
       
-      setTrackingCode(data.code);
+      if (!data.success) throw new Error(data.message || 'حدث خطأ');
+      
+      setTrackingCode(code);
       setSubmitted(true);
     } catch (err) {
       toast.error(err.message);
@@ -72,10 +73,12 @@ export default function QiyasPage() {
     setTrackError('');
     setTrackResult(null);
     try {
-      const res = await fetch(`/api/qiyas_requests?code=${trackInput}`);
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'لم يتم العثور على الطلب');
-      setTrackResult(data);
+      // Find request by code
+      const data = await api.get('/qiyas_requests');
+      const request = data.qiyas_requests?.find(r => r.code === trackInput.trim().toUpperCase());
+      
+      if (!request) throw new Error('لم يتم العثور على الطلب');
+      setTrackResult(request);
     } catch (err) {
       setTrackError(err.message);
     } finally {
