@@ -255,6 +255,18 @@ CREATE TABLE IF NOT EXISTS contact_messages (
   category TEXT DEFAULT 'general',
   createdAt TEXT DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS qiyas_requests (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  grade TEXT NOT NULL,
+  courseId TEXT NOT NULL,
+  courseName TEXT NOT NULL,
+  trackingCode TEXT UNIQUE NOT NULL,
+  status TEXT DEFAULT 'pending',
+  createdAt TEXT DEFAULT CURRENT_TIMESTAMP
+);
 `;
 
 // Run schema

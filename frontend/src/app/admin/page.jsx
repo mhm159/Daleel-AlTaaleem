@@ -84,7 +84,6 @@ export default function AdminDashboard() {
             <h1 className="text-3xl font-bold text-house-800">لوحة تحكم الإدارة</h1>
             <p className="text-house-500 text-sm mt-1">إدارة شاملة لجميع بيانات وأنشطة المدرسة</p>
           </div>
-          <Button variant="secondary" onClick={logout}>تسجيل خروج</Button>
         </div>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">

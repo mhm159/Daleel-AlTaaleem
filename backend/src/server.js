@@ -26,6 +26,7 @@ app.use('/api/grades', require('./routes/grades'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/messages', require('./routes/messages'));
 app.use('/api/contacts', require('./routes/contacts'));
+app.use('/api/qiyas_requests', require('./routes/qiyas'));
 app.use('/api/upload', require('./routes/upload'));
 
 // Health

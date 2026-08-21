@@ -13,6 +13,35 @@ export default function NewsManager() {
     title: '', content: '', excerpt: '', category: 'news', status: 'draft', image: '',
   });
   const [generating, setGenerating] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    setUploading(true);
+
+    try {
+      const res = await fetch('/api/upload/single', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+        },
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'فشل رفع الصورة');
+      
+      setForm(prev => ({ ...prev, image: data.file.url }));
+      toast.success('تم رفع الصورة بنجاح');
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   useEffect(() => {
     loadNews();
@@ -118,8 +147,12 @@ export default function NewsManager() {
               </select>
             </div>
             <div className="sm:col-span-2">
-              <label className="input-label">رابط الصورة</label>
-              <input className="input-field" value={form.image} onChange={(e) => setForm({...form, image: e.target.value})} placeholder="https://..." />
+              <label className="input-label">صورة المقال (رفع من الجهاز)</label>
+              <div className="flex items-center gap-4">
+                <input type="file" accept="image/*" className="input-field flex-1" onChange={handleImageUpload} disabled={uploading} />
+                {uploading && <span className="text-sm text-sky-600">جاري الرفع...</span>}
+                {form.image && <img src={form.image} alt="Preview" className="h-10 w-10 object-cover rounded shadow" />}
+              </div>
             </div>
             <div className="sm:col-span-2">
               <label className="input-label">مقتطف</label>

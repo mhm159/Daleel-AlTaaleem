@@ -11,8 +11,10 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const [settings, setSettings] = useState(null);
+  
+  const isPrivileged = isAuthenticated && (user?.role === 'admin' || user?.role === 'teacher');
 
   useEffect(() => {
     fetch('/api/settings')
@@ -49,7 +51,7 @@ export default function Navbar() {
 
         {/* Desktop Nav (Center) */}
         <div className="hidden lg:flex flex-1 justify-center items-center gap-3 xl:gap-4">
-          {NAV_LINKS.map((link) => (
+          {!isPrivileged && NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -62,9 +64,18 @@ export default function Navbar() {
 
         {/* Actions (Left) */}
         <div className="flex-1 flex justify-end items-center gap-4">
-          <Link href="/portal" className="hidden lg:inline-flex btn-primary text-sm shrink-0">
-            {isAuthenticated ? 'لوحة التحكم' : 'تسجيل الدخول'}
-          </Link>
+          {isPrivileged ? (
+            <div className="hidden lg:flex items-center gap-3">
+              <Link href="/admin" className="text-house-600 hover:text-sky-600 text-sm font-medium">لوحة التحكم</Link>
+              <button className="text-house-600 hover:text-sky-600 text-sm font-medium">الإعدادات</button>
+              <button className="text-house-600 hover:text-sky-600 text-sm font-medium">الإشعارات</button>
+              <button onClick={logout} className="btn-primary text-sm shrink-0 bg-red-600 hover:bg-red-700 shadow-red-500/30">تسجيل الخروج</button>
+            </div>
+          ) : (
+            <Link href="/portal" className="hidden lg:inline-flex btn-primary text-sm shrink-0">
+              {isAuthenticated ? 'لوحة التحكم' : 'تسجيل الدخول'}
+            </Link>
+          )}
 
           {/* Mobile menu button */}
           <button
@@ -88,10 +99,9 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
       <div className={`lg:hidden ${isOpen ? 'block' : 'hidden'}`}>
         <div className="mx-auto max-w-7xl space-y-1 px-4 pb-4">
-          {NAV_LINKS.map((link) => (
+          {!isPrivileged && NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -100,9 +110,18 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link href="/portal" className="mt-2 block btn-primary text-center text-sm">
-            {isAuthenticated ? 'لوحة التحكم' : 'تسجيل الدخول'}
-          </Link>
+          {isPrivileged ? (
+            <div className="pt-2 border-t mt-2 border-gray-100">
+              <Link href="/admin" className="block rounded-lg px-4 py-2 text-sm font-medium text-house-700 hover:bg-sky-50 hover:text-sky-700">لوحة التحكم</Link>
+              <button className="w-full text-right block rounded-lg px-4 py-2 text-sm font-medium text-house-700 hover:bg-sky-50 hover:text-sky-700">الإعدادات</button>
+              <button className="w-full text-right block rounded-lg px-4 py-2 text-sm font-medium text-house-700 hover:bg-sky-50 hover:text-sky-700">الإشعارات</button>
+              <button onClick={logout} className="mt-2 w-full block btn-primary text-center text-sm bg-red-600 hover:bg-red-700">تسجيل الخروج</button>
+            </div>
+          ) : (
+            <Link href="/portal" className="mt-2 block btn-primary text-center text-sm">
+              {isAuthenticated ? 'لوحة التحكم' : 'تسجيل الدخول'}
+            </Link>
+          )}
         </div>
       </div>
     </header>
