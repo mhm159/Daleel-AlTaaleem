@@ -8,17 +8,40 @@ import { Button, Card, SectionHeading, Badge } from '../components/ui/Button';
 import { Loader, Alert } from '../components/ui/Button';
 
 function HeroSection({ settings }) {
+  const [currentImg, setCurrentImg] = useState(0);
+
+  // Safely gather images for the carousel, falling back to defaults if missing
+  const heroImages = [
+    settings?.images?.heroLogo,
+    settings?.images?.tahsiliAd,
+    settings?.images?.qiyasAd,
+    "/qiyas_ad.jpg",
+    "/tahsili_ad.jpg"
+  ].filter(Boolean);
+  
+  // Keep only unique images, max 4
+  const uniqueImages = Array.from(new Set(heroImages)).slice(0, 4);
+
+  useEffect(() => {
+    if (uniqueImages.length > 1) {
+      const timer = setInterval(() => {
+        setCurrentImg((prev) => (prev + 1) % uniqueImages.length);
+      }, 4000); // Change image every 4 seconds
+      return () => clearInterval(timer);
+    }
+  }, [uniqueImages.length]);
+
   if (!settings) return <div className="h-96 flex items-center justify-center"><Loader /></div>;
   const hp = settings.homepage || {};
 
   return (
     <section className="relative overflow-hidden bg-[#e8f6f0] min-h-[90vh] flex items-center pt-20 pb-16 lg:pt-28">
       {/* Decorative blobs */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-      <div className="absolute bottom-0 left-0 w-[800px] h-[600px] bg-[#c2ecd8] rounded-tr-[400px] rounded-br-[100px] -translate-x-1/4 translate-y-1/4 opacity-70"></div>
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-[800px] h-[600px] bg-[#c2ecd8] rounded-tr-[400px] rounded-br-[100px] -translate-x-1/4 translate-y-1/4 opacity-70 pointer-events-none"></div>
       
       {/* Grid pattern subtle overlay on the background */}
-      <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+      <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none"></div>
 
       <div className="relative mx-auto max-w-7xl px-4 lg:px-8 w-full">
         <div className="grid items-center gap-16 lg:grid-cols-2">
@@ -52,30 +75,46 @@ function HeroSection({ settings }) {
             </div>
           </div>
 
-          {/* Visual Component */}
-          <div className="relative animate-fade-in-up flex items-center justify-center mt-12 lg:mt-0" style={{ animationDelay: '0.2s' }}>
-            {/* The Circle Background */}
-            <div className="absolute w-[300px] h-[300px] md:w-[420px] md:h-[420px] rounded-full border-[8px] border-gold-400 bg-[#22c55e] overflow-hidden shadow-2xl">
-              {/* Grid inside circle */}
-              <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#ffffff44_2px,transparent_2px),linear-gradient(to_bottom,#ffffff44_2px,transparent_2px)] bg-[size:40px_40px]"></div>
-              
-              {/* Decorative squares */}
-              <div className="absolute top-12 left-12 w-6 h-6 bg-white/30 rounded-sm rotate-12"></div>
-              <div className="absolute top-32 right-16 w-8 h-8 bg-white/30 rounded-sm -rotate-6"></div>
-              <div className="absolute bottom-24 left-1/3 w-5 h-5 bg-white/30 rounded-sm rotate-45"></div>
-            </div>
+          {/* Visual Component: Portrait Image Slider */}
+          <div className="relative animate-fade-in-up flex items-center justify-center mt-12 lg:mt-0 lg:justify-end" style={{ animationDelay: '0.2s' }}>
+            
+            {/* Soft decorative background pulse behind the frame */}
+            <div className="absolute w-[120%] h-[120%] bg-growth-300/40 rounded-full blur-[80px] -z-10 animate-pulse" style={{ animationDuration: '4s' }}></div>
 
-            {/* The Image (popping out) */}
-            <div className="relative z-10 w-[280px] md:w-[380px] h-[350px] md:h-[480px] flex items-end justify-center">
-              <img
-                src={settings.images?.heroLogo || "/logo.png"}
-                alt="Student Hero"
-                className="w-full h-full object-contain object-bottom drop-shadow-2xl"
-              />
+            {/* Main Carousel Frame */}
+            <div className="relative z-10 w-[280px] h-[400px] sm:w-[320px] sm:h-[460px] md:w-[360px] md:h-[520px] rounded-[2.5rem] bg-white p-2 shadow-2xl border border-white/50 backdrop-blur-sm">
+              <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-gray-50 shadow-inner group">
+                
+                {uniqueImages.map((src, idx) => (
+                  <img
+                    key={idx}
+                    src={src}
+                    alt={`Hero Poster ${idx + 1}`}
+                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out ${idx === currentImg ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}`}
+                  />
+                ))}
+                
+                {/* Soft gradient overlay for aesthetics */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none transition-opacity duration-300 group-hover:opacity-0"></div>
+              </div>
+              
+              {/* Carousel Indicators (Dots) */}
+              {uniqueImages.length > 1 && (
+                <div className="absolute -left-6 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-20">
+                  {uniqueImages.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentImg(idx)}
+                      className={`w-2 rounded-full transition-all duration-500 shadow-sm ${idx === currentImg ? 'h-8 bg-growth-600' : 'h-2 bg-white border border-gray-300 hover:bg-gray-100'}`}
+                      aria-label={`Go to slide ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Floating Card 1: 300+ Courses */}
-            <div className="absolute top-1/4 -left-6 md:-left-12 bg-white rounded-2xl shadow-xl p-3 md:p-4 flex items-center gap-3 animate-float" style={{ animationDelay: '0.3s' }}>
+            <div className="absolute top-12 -left-4 md:-left-8 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-3 md:p-4 flex items-center gap-3 animate-float z-20" style={{ animationDelay: '0.3s' }}>
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600 shrink-0">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
               </div>
@@ -86,7 +125,7 @@ function HeroSection({ settings }) {
             </div>
 
             {/* Floating Card 2: 30+ Trainers */}
-            <div className="absolute top-4 -right-4 md:-right-8 bg-white rounded-2xl shadow-xl p-3 md:p-4 flex items-center gap-3 animate-float" style={{ animationDelay: '0.6s' }}>
+            <div className="absolute top-8 -right-4 md:-right-10 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-3 md:p-4 flex items-center gap-3 animate-float z-20" style={{ animationDelay: '0.6s' }}>
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 shrink-0">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
               </div>
@@ -97,7 +136,7 @@ function HeroSection({ settings }) {
             </div>
 
             {/* Floating Card 3: 1K Learners */}
-            <div className="absolute bottom-24 -left-4 md:-left-8 bg-white rounded-2xl shadow-xl p-3 md:p-4 flex items-center gap-3 animate-float" style={{ animationDelay: '0.9s' }}>
+            <div className="absolute bottom-28 -left-2 md:-left-6 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-3 md:p-4 flex items-center gap-3 animate-float z-20" style={{ animationDelay: '0.9s' }}>
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               </div>
@@ -108,14 +147,14 @@ function HeroSection({ settings }) {
             </div>
 
             {/* Floating Avatars */}
-            <div className="absolute bottom-6 right-0 md:-right-4 bg-white rounded-full shadow-xl py-2 px-4 flex items-center gap-3 animate-float" style={{ animationDelay: '1.2s' }}>
+            <div className="absolute -bottom-4 right-4 md:-right-2 bg-white/90 backdrop-blur-md rounded-full shadow-xl py-2 px-4 flex items-center gap-3 animate-float z-20" style={{ animationDelay: '1.2s' }}>
               <div className="flex -space-x-3 rtl:space-x-reverse">
-                <img className="w-10 h-10 rounded-full border-2 border-white bg-gray-200" src="https://i.pravatar.cc/100?img=1" alt="Student" />
-                <img className="w-10 h-10 rounded-full border-2 border-white bg-gray-200" src="https://i.pravatar.cc/100?img=2" alt="Student" />
-                <img className="w-10 h-10 rounded-full border-2 border-white bg-gray-200" src="https://i.pravatar.cc/100?img=3" alt="Student" />
+                <img className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 object-cover" src="https://i.pravatar.cc/100?img=1" alt="Student" />
+                <img className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 object-cover" src="https://i.pravatar.cc/100?img=2" alt="Student" />
+                <img className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 object-cover" src="https://i.pravatar.cc/100?img=3" alt="Student" />
               </div>
               <div className="text-sm font-extrabold text-house-800 flex items-center gap-1">
-                <span className="text-green-500">❤️</span> 23k+
+                <span className="text-red-500">❤️</span> 23k+
               </div>
             </div>
 
