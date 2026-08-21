@@ -7,7 +7,7 @@ export async function POST(request) {
     const { title, promptType } = await request.json();
 
     if (!title) {
-      return NextResponse.json({ error: 'العنوان مطلوب' }, { status: 400 });
+      return NextResponse.json({ error: 'Title is required' }, { status: 400 });
     }
 
     // Read settings to get API key
@@ -17,7 +17,7 @@ export async function POST(request) {
     
     const aiSettings = settings.aiSettings;
     if (!aiSettings || !aiSettings.apiKey) {
-      return NextResponse.json({ error: 'يرجى إعداد مفتاح الـ API للذكاء الاصطناعي في صفحة الإعدادات أولاً' }, { status: 400 });
+      return NextResponse.json({ error: 'Please configure AI API Key in settings first' }, { status: 400 });
     }
 
     const provider = aiSettings.provider || 'gemini';
@@ -27,19 +27,7 @@ export async function POST(request) {
     if (promptType === 'test') {
       prompt = 'Say the word "SUCCESS" if you receive this message.';
     } else if (promptType === 'news') {
-      prompt = `
-      أنت كاتب محتوى محترف وتعمل لدى مدرسة أهلية راقية في السعودية اسمها "مدارس دليل التعليم الأهلية".
-      مهمتك هي كتابة مقال أو خبر احترافي وعميق جداً بناءً على العنوان التالي: "${title}".
-      
-      المتطلبات:
-      1. أن يكون المحتوى ذو قيمة وعميق وليس سطحياً أو قصيراً.
-      2. استخدم لغة عربية فصحى جذابة ومناسبة للبيئة التعليمية والتربوية.
-      3. قم بتنسيق المحتوى باستخدام وسوم HTML الأساسية فقط (مثل <h3>, <p>, <ul>, <li>, <strong>) ليكون جاهزاً للعرض في الموقع.
-      4. لا تستخدم Markdown، استخدم HTML فقط.
-      5. لا تضف أي مقدمات أو خاتمات للرد مثل "بالتأكيد، إليك المقال"، فقط أرجع كود HTML.
-      6. قم بكتابة (مقتطف) قصير لا يتجاوز سطرين في بداية الرد محاطاً بوسم <excerpt>المقتطف هنا</excerpt> ليتم استخراجه برمجياً.
-      7. المقال يجب أن يعكس اهتمام المدرسة بالتطوير والتكنولوجيا وتربية النشء.
-      `;
+      prompt = 'You are a professional content writer for a Saudi school named "Daleel AlTaaleem". Write a detailed and professional news article in Arabic about: "' + title + '". Use basic HTML tags only (h3, p, ul, li, strong). Do NOT use markdown. Start with a short excerpt wrapped in <excerpt></excerpt> tags.';
     } else {
       prompt = title; // fallback
     }
@@ -48,7 +36,7 @@ export async function POST(request) {
 
     if (provider === 'gemini') {
       // Call Google Gemini API
-      const response = await fetch(\`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=\${apiKey}\`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -57,7 +45,7 @@ export async function POST(request) {
       });
 
       const data = await response.json();
-      if (data.error) throw new Error(data.error.message || 'خطأ من مزود الذكاء الاصطناعي');
+      if (data.error) throw new Error(data.error.message || 'AI Provider Error');
       
       generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
       
@@ -67,7 +55,7 @@ export async function POST(request) {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'Authorization': \`Bearer \${apiKey}\`
+          'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
           model: 'deepseek-chat',
@@ -76,7 +64,7 @@ export async function POST(request) {
       });
 
       const data = await response.json();
-      if (data.error) throw new Error(data.error.message || 'خطأ من مزود الذكاء الاصطناعي');
+      if (data.error) throw new Error(data.error.message || 'AI Provider Error');
       
       generatedText = data.choices?.[0]?.message?.content || '';
 
@@ -86,7 +74,7 @@ export async function POST(request) {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'Authorization': \`Bearer \${apiKey}\`
+          'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
           model: 'gpt-3.5-turbo',
@@ -95,25 +83,25 @@ export async function POST(request) {
       });
 
       const data = await response.json();
-      if (data.error) throw new Error(data.error.message || 'خطأ من مزود الذكاء الاصطناعي');
+      if (data.error) throw new Error(data.error.message || 'AI Provider Error');
       
       generatedText = data.choices?.[0]?.message?.content || '';
     } else {
-      throw new Error('مزود الذكاء الاصطناعي غير مدعوم');
+      throw new Error('Unsupported AI Provider');
     }
 
     if (promptType === 'test') {
-      return NextResponse.json({ success: true, message: 'المفتاح صالح ومستعد للعمل', raw: generatedText });
+      return NextResponse.json({ success: true, message: 'API key is valid and working', raw: generatedText });
     }
 
     // Extract excerpt
     let excerpt = '';
     let content = generatedText;
     
-    const excerptMatch = generatedText.match(/<excerpt>([\\s\\S]*?)<\\/excerpt>/);
+    const excerptMatch = generatedText.match(/<excerpt>([\s\S]*?)<\/excerpt>/);
     if (excerptMatch) {
       excerpt = excerptMatch[1].trim();
-      content = generatedText.replace(/<excerpt>[\\s\\S]*?<\\/excerpt>/, '').trim();
+      content = generatedText.replace(/<excerpt>[\s\S]*?<\/excerpt>/, '').trim();
     } else {
       // Fallback excerpt
       excerpt = content.replace(/<[^>]*>?/gm, '').split(' ').slice(0, 20).join(' ') + '...';
@@ -123,6 +111,6 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('AI Generation Error:', error);
-    return NextResponse.json({ error: error.message || 'حدث خطأ أثناء التوليد' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Error generating content' }, { status: 500 });
   }
 }
