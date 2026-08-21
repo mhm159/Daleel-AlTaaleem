@@ -35,15 +35,27 @@ function HeroSection({ settings }) {
   const hp = settings.homepage || {};
 
   return (
-    <section className="relative overflow-hidden bg-[#e8f6f0] min-h-[90vh] flex items-center pt-20 pb-16 lg:pt-28">
-      {/* Decorative blobs */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-[800px] h-[600px] bg-[#c2ecd8] rounded-tr-[400px] rounded-br-[100px] -translate-x-1/4 translate-y-1/4 opacity-70 pointer-events-none"></div>
+    <section className="relative overflow-hidden bg-[#e8f6f0] min-h-[90vh] flex items-center pt-20 pb-28 lg:pt-28 lg:pb-36">
       
+      {/* Soft Gradient Overlay for depth */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#d2f0e2]/60 pointer-events-none"></div>
+
       {/* Grid pattern subtle overlay on the background */}
       <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none"></div>
 
-      <div className="relative mx-auto max-w-7xl px-4 lg:px-8 w-full">
+      {/* Professional Bottom Wave Divider */}
+      <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none pointer-events-none z-0 transform translate-y-[1px]">
+        <svg
+          className="relative block w-full h-[50px] sm:h-[70px] md:h-[100px] lg:h-[140px]"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 320"
+          preserveAspectRatio="none"
+        >
+          <path fill="#ffffff" fillOpacity="1" d="M0,128L48,144C96,160,192,192,288,181.3C384,171,480,117,576,96C672,75,768,85,864,122.7C960,160,1056,224,1152,240C1248,256,1344,224,1392,208L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+        </svg>
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-4 lg:px-8 w-full z-10">
         <div className="grid items-center gap-16 lg:grid-cols-2">
           
           {/* Text content */}
