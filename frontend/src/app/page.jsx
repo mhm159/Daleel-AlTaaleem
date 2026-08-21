@@ -78,9 +78,6 @@ function HeroSection({ settings }) {
           {/* Visual Component: Portrait Image Slider */}
           <div className="relative animate-fade-in-up flex items-center justify-center mt-12 lg:mt-0 lg:justify-end" style={{ animationDelay: '0.2s' }}>
             
-            {/* Soft decorative background pulse behind the frame */}
-            <div className="absolute w-[120%] h-[120%] bg-growth-300/40 rounded-full blur-[80px] -z-10 animate-pulse" style={{ animationDuration: '4s' }}></div>
-
             {/* Main Carousel Frame */}
             <div className="relative z-10 w-[280px] h-[400px] sm:w-[320px] sm:h-[460px] md:w-[360px] md:h-[520px] rounded-[2.5rem] bg-white p-2 shadow-2xl border border-white/50 backdrop-blur-sm">
               <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-gray-50 shadow-inner group">
@@ -111,51 +108,6 @@ function HeroSection({ settings }) {
                   ))}
                 </div>
               )}
-            </div>
-
-            {/* Floating Card 1: 300+ Courses */}
-            <div className="absolute top-12 -left-4 md:-left-8 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-3 md:p-4 flex items-center gap-3 animate-float z-20" style={{ animationDelay: '0.3s' }}>
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600 shrink-0">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-              </div>
-              <div>
-                <div className="text-lg md:text-xl font-extrabold text-house-800">300+</div>
-                <div className="text-xs md:text-sm text-house-500 font-medium">دورات ومناهج</div>
-              </div>
-            </div>
-
-            {/* Floating Card 2: 30+ Trainers */}
-            <div className="absolute top-8 -right-4 md:-right-10 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-3 md:p-4 flex items-center gap-3 animate-float z-20" style={{ animationDelay: '0.6s' }}>
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 shrink-0">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              </div>
-              <div>
-                <div className="text-lg md:text-xl font-extrabold text-house-800">30+</div>
-                <div className="text-xs md:text-sm text-house-500 font-medium">معلم وخبير</div>
-              </div>
-            </div>
-
-            {/* Floating Card 3: 1K Learners */}
-            <div className="absolute bottom-28 -left-2 md:-left-6 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-3 md:p-4 flex items-center gap-3 animate-float z-20" style={{ animationDelay: '0.9s' }}>
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              </div>
-              <div>
-                <div className="text-lg md:text-xl font-extrabold text-house-800">1K+</div>
-                <div className="text-xs md:text-sm text-house-500 font-medium">طالب مسجل</div>
-              </div>
-            </div>
-
-            {/* Floating Avatars */}
-            <div className="absolute -bottom-4 right-4 md:-right-2 bg-white/90 backdrop-blur-md rounded-full shadow-xl py-2 px-4 flex items-center gap-3 animate-float z-20" style={{ animationDelay: '1.2s' }}>
-              <div className="flex -space-x-3 rtl:space-x-reverse">
-                <img className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 object-cover" src="https://i.pravatar.cc/100?img=1" alt="Student" />
-                <img className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 object-cover" src="https://i.pravatar.cc/100?img=2" alt="Student" />
-                <img className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 object-cover" src="https://i.pravatar.cc/100?img=3" alt="Student" />
-              </div>
-              <div className="text-sm font-extrabold text-house-800 flex items-center gap-1">
-                <span className="text-red-500">❤️</span> 23k+
-              </div>
             </div>
 
           </div>
