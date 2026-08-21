@@ -29,10 +29,14 @@ export default function QiyasManager() {
       .catch(console.error);
 
     // Fetch Requests
-    fetch('/api/qiyas_requests')
+    fetch('/api/qiyas_requests/admin/all', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}` // assuming token is used, or maybe backend doesn't check strictly
+      }
+    })
       .then(res => res.json())
       .then(data => {
-        if (data.requests) setRequests(data.requests);
+        if (data.data) setRequests(data.data);
       })
       .catch(console.error);
   }, []);
@@ -157,10 +161,13 @@ export default function QiyasManager() {
                           onChange={async (e) => {
                             const newStatus = e.target.value;
                             try {
-                              const res = await fetch('/api/qiyas_requests', {
+                              const res = await fetch(`/api/qiyas_requests/${req.id}`, {
                                 method: 'PUT',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ id: req.id, status: newStatus })
+                                headers: { 
+                                  'Content-Type': 'application/json',
+                                  'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                },
+                                body: JSON.stringify({ status: newStatus })
                               });
                               if (!res.ok) throw new Error('فشل التحديث');
                               toast.success('تم تحديث حالة الطلب');

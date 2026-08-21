@@ -46,18 +46,23 @@ export default function QiyasPage() {
     setSubmitting(true);
     try {
       const code = 'QYS-' + Math.floor(1000 + Math.random() * 9000);
-      const data = await api.post('/qiyas_requests', {
-        name: formData.name,
-        phone: formData.phone,
-        grade: formData.grade,
-        courseid: selectedCourse.id,
-        coursename: selectedCourse.name,
-        code: code,
-        status: 'جديد',
-        createdat: new Date().toISOString()
+      const res = await fetch('/api/qiyas_requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          grade: formData.grade,
+          courseid: selectedCourse.id,
+          coursename: selectedCourse.name,
+          code: code,
+          status: 'جديد',
+          createdat: new Date().toISOString()
+        })
       });
+      const data = await res.json();
       
-      if (!data.success) throw new Error(data.message || 'حدث خطأ');
+      if (!res.ok) throw new Error(data.message || 'حدث خطأ');
       
       setTrackingCode(code);
       setSubmitted(true);
@@ -76,12 +81,12 @@ export default function QiyasPage() {
     setTrackResult(null);
     try {
       // Find request by code
-      const data = await api.get('/qiyas_requests');
-      const request = data.qiyas_requests?.find(r => 
-        (r.code === trackInput.trim().toUpperCase()) ||
-        (r.trackingCode === trackInput.trim().toUpperCase()) ||
-        (r.tracking_code === trackInput.trim().toUpperCase())
-      );
+      const res = await fetch('/api/qiyas_requests?code=' + trackInput.trim().toUpperCase());
+      const data = await res.json();
+      
+      if (!res.ok) throw new Error(data.error || 'لم يتم العثور على الطلب');
+      
+      const request = data;
       
       if (!request) throw new Error('لم يتم العثور على الطلب');
       setTrackResult(request);
