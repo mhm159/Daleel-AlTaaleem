@@ -22,7 +22,7 @@ function HeroSection({ settings }) {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           {/* Text content */}
           <div className="animate-fade-in-up">
-            <Badge variant="gold">✦ التميز في التعليم</Badge>
+            <Badge variant="gold"> التميز في التعليم</Badge>
             <h1 className="mt-4 text-4xl font-bold leading-tight text-house-800 md:text-5xl lg:text-6xl">
               {hp.heroTitle1} <span className="gradient-text">{hp.heroTitleAccent1}</span>،<br />
               {hp.heroTitle2} <span className="gradient-text">{hp.heroTitleAccent2}</span>
