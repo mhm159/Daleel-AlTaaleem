@@ -12,71 +12,113 @@ function HeroSection({ settings }) {
   const hp = settings.homepage || {};
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-bl from-sky-50 via-white to-growth-50">
-      {/* Decorative background */}
-      <div className="absolute inset-0 grid-pattern opacity-40"></div>
-      <div className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-sky-200 blur-3xl opacity-50"></div>
-      <div className="absolute -right-20 top-40 h-72 w-72 rounded-full bg-growth-200 blur-3xl opacity-50"></div>
+    <section className="relative overflow-hidden bg-[#e8f6f0] min-h-[90vh] flex items-center pt-20 pb-16 lg:pt-28">
+      {/* Decorative blobs */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+      <div className="absolute bottom-0 left-0 w-[800px] h-[600px] bg-[#c2ecd8] rounded-tr-[400px] rounded-br-[100px] -translate-x-1/4 translate-y-1/4 opacity-70"></div>
+      
+      {/* Grid pattern subtle overlay on the background */}
+      <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:60px_60px]"></div>
 
-      <div className="relative mx-auto max-w-7xl px-4 py-20 lg:px-8 lg:py-32">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+      <div className="relative mx-auto max-w-7xl px-4 lg:px-8 w-full">
+        <div className="grid items-center gap-16 lg:grid-cols-2">
+          
           {/* Text content */}
-          <div className="animate-fade-in-up">
-            <Badge variant="gold"> التميز في التعليم</Badge>
-            <h1 className="mt-4 text-4xl font-bold leading-tight text-house-800 md:text-5xl lg:text-6xl">
-              {hp.heroTitle1} <span className="gradient-text">{hp.heroTitleAccent1}</span>،<br />
-              {hp.heroTitle2} <span className="gradient-text">{hp.heroTitleAccent2}</span>
-            </h1>
-            <p className="mt-6 text-lg text-house-500 max-w-xl">
-              {hp.heroSubtitle}
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href="/admissions" className="btn-primary inline-flex items-center justify-center text-center">
-                سجّل الآن
-                <svg className="mr-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </Link>
-              <Link href="/portal" className="btn-secondary inline-flex items-center justify-center text-center">
-                بوابة ولي الأمر
-              </Link>
+          <div className="animate-fade-in-up z-10 lg:pr-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 backdrop-blur-md shadow-sm border border-white/50 mb-6">
+              <span className="text-growth-600 text-lg">✨</span>
+              <span className="text-sm font-semibold text-house-700">تعليم ذكي، مستقبل مشرق</span>
             </div>
-
-            {/* Quick stats */}
-            <div className="mt-12 grid grid-cols-3 gap-6">
-              <div>
-                <div className="text-3xl font-bold text-sky-600">{hp.stat1Value}</div>
-                <div className="text-sm text-house-500">{hp.stat1Label}</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-growth-600">{hp.stat2Value}</div>
-                <div className="text-sm text-house-500">{hp.stat2Label}</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-gold-600">{hp.stat3Value}</div>
-                <div className="text-sm text-house-500">{hp.stat3Label}</div>
-              </div>
+            
+            <h1 className="text-5xl font-extrabold leading-[1.1] text-[#1c2e26] md:text-6xl lg:text-7xl mb-6">
+              {hp.heroTitle1 || 'مستقبل التعليم،'}<br />
+              {hp.heroTitle2 || 'مدعوم بـ'} <span className="text-gold-500 relative inline-block">
+                {hp.heroTitleAccent2 || 'الذكاء'}
+                <svg className="absolute -bottom-2 left-0 w-full h-3 text-gold-400/30 -z-10" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0 15 Q 50 0 100 15" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round"/></svg>
+              </span>
+            </h1>
+            
+            <p className="text-lg text-house-600 max-w-lg mb-10 leading-relaxed font-medium">
+              {hp.heroSubtitle || "منصة واحدة لتوحيد رحلتك التعليمية، من الاختبارات التفاعلية إلى الجلسات المباشرة بقيادة الخبراء، كل ذلك في مكان واحد."}
+            </p>
+            
+            <div className="flex flex-col gap-4 sm:flex-row items-center">
+              <Link href="/admissions" className="px-8 py-3.5 rounded-full bg-[#0d4a38] text-white font-bold hover:bg-[#083125] transition-all shadow-lg shadow-[#0d4a38]/30 w-full sm:w-auto text-center transform hover:-translate-y-1">
+                ابدأ الآن
+              </Link>
+              <Link href="/portal" className="px-8 py-3.5 rounded-full border-2 border-[#0d4a38] text-[#0d4a38] font-bold hover:bg-[#0d4a38] hover:text-white transition-all w-full sm:w-auto text-center transform hover:-translate-y-1">
+                اكتشف المزيد
+              </Link>
             </div>
           </div>
 
-          {/* Logo Visual */}
-          <div className="relative animate-fade-in-up flex items-center justify-center" style={{ animationDelay: '0.2s' }}>
-            <div className="relative rounded-3xl bg-gradient-to-br from-sky-400 to-sky-600 p-8 shadow-2xl">
-              <div className="rounded-2xl bg-white/10 backdrop-blur-sm p-8 flex items-center justify-center">
-                <img
-                  src={settings.images?.heroLogo || "/logo.png"}
-                  alt="مدارس دليل التعلم الأهلية"
-                  className="object-contain animate-float drop-shadow-2xl w-[240px] h-[240px]"
-                />
+          {/* Visual Component */}
+          <div className="relative animate-fade-in-up flex items-center justify-center mt-12 lg:mt-0" style={{ animationDelay: '0.2s' }}>
+            {/* The Circle Background */}
+            <div className="absolute w-[300px] h-[300px] md:w-[420px] md:h-[420px] rounded-full border-[8px] border-gold-400 bg-[#22c55e] overflow-hidden shadow-2xl">
+              {/* Grid inside circle */}
+              <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#ffffff44_2px,transparent_2px),linear-gradient(to_bottom,#ffffff44_2px,transparent_2px)] bg-[size:40px_40px]"></div>
+              
+              {/* Decorative squares */}
+              <div className="absolute top-12 left-12 w-6 h-6 bg-white/30 rounded-sm rotate-12"></div>
+              <div className="absolute top-32 right-16 w-8 h-8 bg-white/30 rounded-sm -rotate-6"></div>
+              <div className="absolute bottom-24 left-1/3 w-5 h-5 bg-white/30 rounded-sm rotate-45"></div>
+            </div>
+
+            {/* The Image (popping out) */}
+            <div className="relative z-10 w-[280px] md:w-[380px] h-[350px] md:h-[480px] flex items-end justify-center">
+              <img
+                src={settings.images?.heroLogo || "/logo.png"}
+                alt="Student Hero"
+                className="w-full h-full object-contain object-bottom drop-shadow-2xl"
+              />
+            </div>
+
+            {/* Floating Card 1: 300+ Courses */}
+            <div className="absolute top-1/4 -left-6 md:-left-12 bg-white rounded-2xl shadow-xl p-3 md:p-4 flex items-center gap-3 animate-float" style={{ animationDelay: '0.3s' }}>
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600 shrink-0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
               </div>
-              <div className="mt-4 flex items-center justify-between text-white">
-                <div className="text-sm">
-                  <div className="font-semibold">أمان • نمو • تميز</div>
-                  <div className="text-sky-100">رسالتنا لطلابنا</div>
-                </div>
-                <div className="h-12 w-12 rounded-full bg-white/20 flex items-center justify-center">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                </div>
+              <div>
+                <div className="text-lg md:text-xl font-extrabold text-house-800">300+</div>
+                <div className="text-xs md:text-sm text-house-500 font-medium">دورات ومناهج</div>
               </div>
             </div>
+
+            {/* Floating Card 2: 30+ Trainers */}
+            <div className="absolute top-4 -right-4 md:-right-8 bg-white rounded-2xl shadow-xl p-3 md:p-4 flex items-center gap-3 animate-float" style={{ animationDelay: '0.6s' }}>
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 shrink-0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div>
+                <div className="text-lg md:text-xl font-extrabold text-house-800">30+</div>
+                <div className="text-xs md:text-sm text-house-500 font-medium">معلم وخبير</div>
+              </div>
+            </div>
+
+            {/* Floating Card 3: 1K Learners */}
+            <div className="absolute bottom-24 -left-4 md:-left-8 bg-white rounded-2xl shadow-xl p-3 md:p-4 flex items-center gap-3 animate-float" style={{ animationDelay: '0.9s' }}>
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div>
+                <div className="text-lg md:text-xl font-extrabold text-house-800">1K+</div>
+                <div className="text-xs md:text-sm text-house-500 font-medium">طالب مسجل</div>
+              </div>
+            </div>
+
+            {/* Floating Avatars */}
+            <div className="absolute bottom-6 right-0 md:-right-4 bg-white rounded-full shadow-xl py-2 px-4 flex items-center gap-3 animate-float" style={{ animationDelay: '1.2s' }}>
+              <div className="flex -space-x-3 rtl:space-x-reverse">
+                <img className="w-10 h-10 rounded-full border-2 border-white bg-gray-200" src="https://i.pravatar.cc/100?img=1" alt="Student" />
+                <img className="w-10 h-10 rounded-full border-2 border-white bg-gray-200" src="https://i.pravatar.cc/100?img=2" alt="Student" />
+                <img className="w-10 h-10 rounded-full border-2 border-white bg-gray-200" src="https://i.pravatar.cc/100?img=3" alt="Student" />
+              </div>
+              <div className="text-sm font-extrabold text-house-800 flex items-center gap-1">
+                <span className="text-green-500">❤️</span> 23k+
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
