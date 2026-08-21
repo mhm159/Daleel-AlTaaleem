@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { SectionHeading, Card, Badge, Button, Loader, Alert } from '../../components/ui/Button';
 
 export default function QiyasPage() {
