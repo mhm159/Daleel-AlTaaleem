@@ -47,12 +47,14 @@ export default function QiyasPage() {
     try {
       const code = 'QYS-' + Math.floor(1000 + Math.random() * 9000);
       const data = await api.post('/qiyas_requests', {
-        ...formData,
-        courseId: selectedCourse.id,
-        courseName: selectedCourse.name,
-        code,
+        name: formData.name,
+        phone: formData.phone,
+        grade: formData.grade,
+        course_id: selectedCourse.id,
+        course_name: selectedCourse.name,
+        tracking_code: code,
         status: 'جديد',
-        createdAt: new Date().toISOString()
+        created_at: new Date().toISOString()
       });
       
       if (!data.success) throw new Error(data.message || 'حدث خطأ');
@@ -75,7 +77,11 @@ export default function QiyasPage() {
     try {
       // Find request by code
       const data = await api.get('/qiyas_requests');
-      const request = data.qiyas_requests?.find(r => r.code === trackInput.trim().toUpperCase());
+      const request = data.qiyas_requests?.find(r => 
+        (r.tracking_code === trackInput.trim().toUpperCase()) || 
+        (r.code === trackInput.trim().toUpperCase()) ||
+        (r.trackingCode === trackInput.trim().toUpperCase())
+      );
       
       if (!request) throw new Error('لم يتم العثور على الطلب');
       setTrackResult(request);
@@ -276,7 +282,7 @@ export default function QiyasPage() {
                 </div>
                 <div>
                   <span className="block text-sm text-house-500">الدورة المسجلة:</span>
-                  <span className="font-semibold text-house-800">{trackResult.courseName}</span>
+                  <span className="font-semibold text-house-800">{trackResult.course_name || trackResult.courseName}</span>
                 </div>
                 <div className="pt-2">
                   <Button variant="secondary" className="w-full text-sm">استكمال بيانات الدفع (قريباً)</Button>
