@@ -88,10 +88,10 @@ function HeroSection({ settings }) {
             </p>
             
             <div className="flex flex-col gap-4 sm:flex-row items-center">
-              <Link href="/admissions" className="px-8 py-3.5 rounded-full bg-growth-700 text-white font-bold hover:bg-growth-800 transition-all shadow-lg shadow-growth-700/30 w-full sm:w-auto text-center transform hover:-translate-y-1">
+              <Link href="/admissions" className="px-8 py-3.5 rounded-full bg-sky-600 text-white font-bold hover:bg-sky-700 transition-all shadow-lg shadow-sky-600/30 w-full sm:w-auto text-center transform hover:-translate-y-1">
                 ابدأ الآن
               </Link>
-              <Link href="/portal" className="px-8 py-3.5 rounded-full border-2 border-growth-700 text-growth-700 font-bold hover:bg-growth-700 hover:text-white transition-all w-full sm:w-auto text-center transform hover:-translate-y-1">
+              <Link href="/portal" className="px-8 py-3.5 rounded-full border-2 border-sky-600 text-sky-600 font-bold hover:bg-sky-600 hover:text-white transition-all w-full sm:w-auto text-center transform hover:-translate-y-1">
                 اكتشف المزيد
               </Link>
             </div>
