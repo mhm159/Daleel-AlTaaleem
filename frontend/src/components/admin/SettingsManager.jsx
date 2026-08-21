@@ -92,29 +92,92 @@ export default function SettingsManager() {
                 </div>
                 {settings.images?.logo && <img src={settings.images.logo} alt="preview" className="h-16 mt-2 object-contain bg-house-50 p-2 rounded border" />}
               </div>
-              <div>
-                <label className="input-label">صورة بطل الرئيسية (Hero)</label>
-                <div className="flex flex-col gap-2">
-                  <input type="file" accept="image/*" className="input-field text-sm" onChange={(e) => handleImageUpload('heroLogo', e)} />
-                  <input type="text" placeholder="أو أدخل الرابط..." className="input-field text-sm" value={settings.images?.heroLogo || ''} onChange={(e) => updateImage('heroLogo', e.target.value)} />
+              <div className="md:col-span-2">
+                <label className="input-label font-bold text-lg mb-2 block">صور الإطار المتحرك (Carousel Images)</label>
+                <div className="space-y-4">
+                  {(settings.images?.carouselImages || []).map((img, index) => (
+                    <div key={index} className="flex flex-col md:flex-row gap-4 items-start md:items-center bg-house-50 p-4 rounded border">
+                      {/* Image Preview */}
+                      {img.url ? (
+                        <img src={img.url} alt={`Carousel ${index}`} className="w-24 h-32 object-cover rounded border bg-white" />
+                      ) : (
+                        <div className="w-24 h-32 bg-gray-200 rounded border flex items-center justify-center text-xs text-gray-500">لا توجد صورة</div>
+                      )}
+                      
+                      <div className="flex-1 space-y-3 w-full">
+                        <div className="flex flex-col sm:flex-row gap-2">
+                          <input 
+                            type="file" 
+                            accept="image/*" 
+                            className="input-field text-sm flex-1" 
+                            onChange={(e) => {
+                              const file = e.target.files[0];
+                              if (file) {
+                                if (file.size > 2 * 1024 * 1024) { toast.error('حجم الصورة كبير جداً'); return; }
+                                const reader = new FileReader();
+                                reader.onloadend = () => {
+                                  const newImages = [...(settings.images.carouselImages || [])];
+                                  newImages[index].url = reader.result;
+                                  updateImage('carouselImages', newImages);
+                                };
+                                reader.readAsDataURL(file);
+                              }
+                            }} 
+                          />
+                          <input 
+                            type="text" 
+                            placeholder="أو أدخل الرابط..." 
+                            className="input-field text-sm flex-1" 
+                            value={img.url || ''} 
+                            onChange={(e) => {
+                              const newImages = [...(settings.images.carouselImages || [])];
+                              newImages[index].url = e.target.value;
+                              updateImage('carouselImages', newImages);
+                            }} 
+                          />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input 
+                              type="checkbox" 
+                              checked={img.active !== false}
+                              onChange={(e) => {
+                                const newImages = [...(settings.images.carouselImages || [])];
+                                newImages[index].active = e.target.checked;
+                                updateImage('carouselImages', newImages);
+                              }}
+                              className="w-4 h-4 text-growth-600 rounded"
+                            />
+                            <span className="text-sm font-medium text-house-700">{img.active !== false ? 'مفعل (يظهر في الموقع)' : 'معطل (مخفي)'}</span>
+                          </label>
+                          <Button 
+                            type="button"
+                            variant="danger"
+                            className="px-3 py-1 text-xs bg-red-100 text-red-600 hover:bg-red-200 border-0"
+                            onClick={() => {
+                              const newImages = settings.images.carouselImages.filter((_, i) => i !== index);
+                              updateImage('carouselImages', newImages);
+                            }}
+                          >
+                            حذف الصورة
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  <Button 
+                    type="button" 
+                    variant="secondary" 
+                    className="w-full py-3 border-dashed border-2 bg-transparent text-house-600 hover:bg-house-50"
+                    onClick={() => {
+                      const newImages = [...(settings.images?.carouselImages || []), { url: '', active: true }];
+                      updateImage('carouselImages', newImages);
+                    }}
+                  >
+                    + إضافة صورة جديدة للألبوم
+                  </Button>
                 </div>
-                {settings.images?.heroLogo && <img src={settings.images.heroLogo} alt="preview" className="h-16 mt-2 object-contain bg-house-50 p-2 rounded border" />}
-              </div>
-              <div>
-                <label className="input-label">إعلان القدرات (القياس)</label>
-                <div className="flex flex-col gap-2">
-                  <input type="file" accept="image/*" className="input-field text-sm" onChange={(e) => handleImageUpload('qiyasAd', e)} />
-                  <input type="text" placeholder="أو أدخل الرابط..." className="input-field text-sm" value={settings.images?.qiyasAd || ''} onChange={(e) => updateImage('qiyasAd', e.target.value)} />
-                </div>
-                {settings.images?.qiyasAd && <img src={settings.images.qiyasAd} alt="preview" className="h-16 mt-2 object-contain bg-house-50 p-2 rounded border" />}
-              </div>
-              <div>
-                <label className="input-label">إعلان التحصيلي</label>
-                <div className="flex flex-col gap-2">
-                  <input type="file" accept="image/*" className="input-field text-sm" onChange={(e) => handleImageUpload('tahsiliAd', e)} />
-                  <input type="text" placeholder="أو أدخل الرابط..." className="input-field text-sm" value={settings.images?.tahsiliAd || ''} onChange={(e) => updateImage('tahsiliAd', e.target.value)} />
-                </div>
-                {settings.images?.tahsiliAd && <img src={settings.images.tahsiliAd} alt="preview" className="h-16 mt-2 object-contain bg-house-50 p-2 rounded border" />}
               </div>
               <div className="md:col-span-2">
                 <label className="input-label">صورة صفحة "عن المدرسة"</label>

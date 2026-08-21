@@ -10,17 +10,27 @@ import { Loader, Alert } from '../components/ui/Button';
 function HeroSection({ settings }) {
   const [currentImg, setCurrentImg] = useState(0);
 
-  // Safely gather images for the carousel, falling back to defaults if missing
-  const heroImages = [
-    settings?.images?.heroLogo,
-    settings?.images?.tahsiliAd,
-    settings?.images?.qiyasAd,
-    "/qiyas_ad.jpg",
-    "/tahsili_ad.jpg"
-  ].filter(Boolean);
-  
-  // Keep only unique images, max 4
-  const uniqueImages = Array.from(new Set(heroImages)).slice(0, 4);
+  // Safely gather images for the carousel from settings
+  let carouselImagesList = [];
+  if (settings?.images?.carouselImages && Array.isArray(settings.images.carouselImages)) {
+    carouselImagesList = settings.images.carouselImages
+      .filter(img => img.active !== false && img.url)
+      .map(img => img.url);
+  }
+
+  // Fallback to defaults if no custom images configured yet
+  if (carouselImagesList.length === 0) {
+    carouselImagesList = [
+      settings?.images?.heroLogo,
+      settings?.images?.tahsiliAd,
+      settings?.images?.qiyasAd,
+      "/qiyas_ad.jpg",
+      "/tahsili_ad.jpg"
+    ].filter(Boolean);
+  }
+
+  // Keep only unique images
+  const uniqueImages = Array.from(new Set(carouselImagesList));
 
   useEffect(() => {
     if (uniqueImages.length > 1) {
@@ -35,10 +45,10 @@ function HeroSection({ settings }) {
   const hp = settings.homepage || {};
 
   return (
-    <section className="relative overflow-hidden bg-[#e8f6f0] min-h-[90vh] flex items-center pt-20 pb-28 lg:pt-28 lg:pb-36">
+    <section className="relative overflow-hidden bg-growth-50 min-h-[90vh] flex items-center pt-20 pb-28 lg:pt-28 lg:pb-36">
       
       {/* Soft Gradient Overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#d2f0e2]/60 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-growth-100/50 pointer-events-none"></div>
 
       {/* Grid pattern subtle overlay on the background */}
       <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none"></div>
@@ -65,7 +75,7 @@ function HeroSection({ settings }) {
               <span className="text-sm font-semibold text-house-700">تعليم ذكي، مستقبل مشرق</span>
             </div>
             
-            <h1 className="text-5xl font-extrabold leading-[1.1] text-[#1c2e26] md:text-6xl lg:text-7xl mb-6">
+            <h1 className="text-5xl font-extrabold leading-[1.1] text-house-900 md:text-6xl lg:text-7xl mb-6">
               {hp.heroTitle1 || 'مستقبل التعليم،'}<br />
               {hp.heroTitle2 || 'مدعوم بـ'} <span className="text-gold-500 relative inline-block">
                 {hp.heroTitleAccent2 || 'الذكاء'}
@@ -78,10 +88,10 @@ function HeroSection({ settings }) {
             </p>
             
             <div className="flex flex-col gap-4 sm:flex-row items-center">
-              <Link href="/admissions" className="px-8 py-3.5 rounded-full bg-[#0d4a38] text-white font-bold hover:bg-[#083125] transition-all shadow-lg shadow-[#0d4a38]/30 w-full sm:w-auto text-center transform hover:-translate-y-1">
+              <Link href="/admissions" className="px-8 py-3.5 rounded-full bg-growth-700 text-white font-bold hover:bg-growth-800 transition-all shadow-lg shadow-growth-700/30 w-full sm:w-auto text-center transform hover:-translate-y-1">
                 ابدأ الآن
               </Link>
-              <Link href="/portal" className="px-8 py-3.5 rounded-full border-2 border-[#0d4a38] text-[#0d4a38] font-bold hover:bg-[#0d4a38] hover:text-white transition-all w-full sm:w-auto text-center transform hover:-translate-y-1">
+              <Link href="/portal" className="px-8 py-3.5 rounded-full border-2 border-growth-700 text-growth-700 font-bold hover:bg-growth-700 hover:text-white transition-all w-full sm:w-auto text-center transform hover:-translate-y-1">
                 اكتشف المزيد
               </Link>
             </div>
